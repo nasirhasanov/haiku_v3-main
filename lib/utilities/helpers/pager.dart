@@ -5,6 +5,7 @@ import 'package:haiku/cubits/talks/talks_cubit.dart';
 import 'package:haiku/cubits/user/profile_cubit.dart';
 import 'package:haiku/presentation/pages/add/add_post_page.dart';
 import 'package:haiku/presentation/pages/author/author_profile_page.dart';
+import 'package:haiku/presentation/pages/home/views/show_profile_pic_full_screen.dart';
 import 'package:haiku/presentation/pages/talks/talks_page.dart';
 
 import '../../cubits/home/home_cubit.dart';
@@ -64,4 +65,9 @@ class Pager {
             AuthorProfileCubit(authorId: authorId)..loadProfile(),
         child: const AuthorProfilePage(),
       );
+
+  static Widget showProfilePic({
+    required String profilePicUrl,
+  }) =>
+       ShowProfilePicFullScreen(imageUrl: profilePicUrl);
 }

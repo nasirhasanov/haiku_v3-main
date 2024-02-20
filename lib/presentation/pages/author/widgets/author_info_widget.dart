@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:haiku/cubits/author/author_profile_cubit.dart';
 import 'package:haiku/data/models/user_info_model.dart';
@@ -9,6 +10,8 @@ import 'package:haiku/utilities/constants/app_colors.dart';
 import 'package:haiku/utilities/constants/app_paddings.dart';
 import 'package:haiku/utilities/constants/app_sized_boxes.dart';
 import 'package:haiku/utilities/constants/app_text_styles.dart';
+import 'package:haiku/utilities/helpers/go.dart';
+import 'package:haiku/utilities/helpers/pager.dart';
 
 class AuthorInfoWidget extends StatelessWidget {
   const AuthorInfoWidget({super.key});
@@ -33,9 +36,17 @@ class AuthorInfoWidget extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  ProfilePhotoWidget(
-                    imageRadius: 36,
-                    imageUrl: profilePicUrl,
+                  GestureDetector(
+                    onTap: () {
+                      if (profilePicUrl != null) {
+                        Go.to(context,
+                            Pager.showProfilePic(profilePicUrl: profilePicUrl));
+                      }
+                    },
+                    child: ProfilePhotoWidget(
+                      imageRadius: 36,
+                      imageUrl: profilePicUrl,
+                    ),
                   ),
                   Text('@$username', style: AppTextStyles.normalBlack24),
                   AppSizedBoxes.h4,

@@ -35,7 +35,6 @@ class BottomDialog {
                   title: Text(option.title),
                   onTap: () {
                     onOptionSelected(option);
-                    Navigator.pop(context);
                   },
                 );
               },

@@ -1,15 +1,21 @@
-
-
 import 'dart:typed_data';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:haiku/cubits/user/profile_cubit.dart';
 import 'package:haiku/data/models/user_info_model.dart';
+import 'package:haiku/data/services/user/profile_pic_service.dart';
+import 'package:haiku/data/services/user/user_info_service.dart';
 import 'package:haiku/utilities/constants/app_keys.dart';
+import 'package:haiku/utilities/constants/app_texts.dart';
+import 'package:haiku/utilities/helpers/auth_utils.dart';
 import 'package:haiku/utilities/helpers/bottom_options_provider.dart';
 import 'package:haiku/utilities/helpers/bottom_sheet_dialogs.dart';
+import 'package:haiku/utilities/helpers/go.dart';
+import 'package:haiku/utilities/helpers/pager.dart';
+import 'package:haiku/utilities/helpers/toast.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -28,14 +34,51 @@ class ProfileInfoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubit = context.read<ProfileCubit>();
 
-    return StreamBuilder<UserInfoModel?>(
+    Future<void> selectAndUploadPhoto() async {
+      var uploadPic = await _selectAndCropImage(context);
+      if (uploadPic != null) {
+        var uploadResult = await cubit.uploadUserPic(uploadPic);
+        if (uploadResult == true) {
+          Toast.show(AppTexts.photoChanged, context);
+        } else {
+          Toast.show(AppTexts.anErrorOccurred, context);
+        }
+      }
+    }
+
+    Future<void> removePhoto() async {
+      var removeResult = await cubit.removeUserPic();
+      if (removeResult == true) {
+        Toast.show(AppTexts.photoRemoved, context);
+      } else {
+        Toast.show(AppTexts.anErrorOccurred, context);
+      }
+    }
+
+    showProfilePicture(String profilePicUrl) {
+      Go.to(
+        context,
+        Pager.showProfilePic(
+          profilePicUrl: profilePicUrl,
+        ),
+      );
+    }
+
+    return StreamBuilder(
         initialData: null,
-        stream: cubit.userInfoStream,
-        builder: (context, snapshot) {
-          final profilePicUrl = snapshot.data?.profilePicPath;
-          final username = snapshot.data?.userName;
-          final bio = snapshot.data?.bio;
-          final score = snapshot.data?.score;
+        stream:
+            ProfilePicService.getProfilePicURLStream(AuthUtils().currentUserId),
+        builder: (streamContext, snapshot) {
+          final DocumentSnapshot<Object?>? data = snapshot.data;
+          UserInfoModel? profileInfo;
+          if (data != null) {
+            profileInfo = UserInfoModel.fromDocumentSnapshot(data);
+            UserInfoService().saveLocalProfileInfo(profileInfo);
+          }
+          final profilePicUrl = profileInfo?.profilePicPath;
+          final username = profileInfo?.userName;
+          final bio = profileInfo?.bio;
+          final score = profileInfo?.score;
 
           return Container(
             color: Colors.transparent,
@@ -49,17 +92,23 @@ class ProfileInfoWidget extends StatelessWidget {
                       final options = BottomOptionsProvider.instance
                           .getOptionsForProfilePhoto();
                       if (profilePicUrl == null) {
-                        var uploadPic = await _selectAndCropImage(context);
-                        if (uploadPic != null) {
-                           cubit.
-                        }
+                        await selectAndUploadPhoto();
                         return;
                       }
                       BottomDialog.showOptionsDialog(
                         context: context,
                         options: options,
-                        onOptionSelected: (selectedOption) async {
-                          if (selectedOption.key == AppKeys.seeProfilePhoto) {}
+                        onOptionSelected: (selectedOption) {
+                          Go.back(context);
+                          if (selectedOption.key == AppKeys.seeProfilePhoto) {
+                            showProfilePicture(profilePicUrl);
+                          }
+                          if (selectedOption.key == AppKeys.chooseAnotherPic) {
+                            selectAndUploadPhoto();
+                          }
+                          if (selectedOption.key == AppKeys.removeProfilePic) {
+                            removePhoto();
+                          }
                         },
                       );
                     },
@@ -133,5 +182,6 @@ class ProfileInfoWidget extends StatelessWidget {
         return compressedFile;
       }
     }
+    return null;
   }
 }

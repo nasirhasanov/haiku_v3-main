@@ -41,6 +41,9 @@ class AppTexts {
   static const String seeProfilePhoto = 'See profile photo';
   static const String chooseProfilePic = 'Choose another';
   static const String removePhoto = 'Remove photo';
+  static const String photoChanged = 'Photo Changed';
+  static const String photoRemoved = 'Photo Removed';
+  static const String profilePicture = 'Profile Picture';
 
   static const String urlTermsOfService =
       'https://haiku-production-server.web.app/Terms&Conditions.html';

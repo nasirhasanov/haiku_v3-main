@@ -32,7 +32,7 @@ mixin ProfileMixin {
 
   ValueStream<List<PostModel>> get myPostStream => _myPostSubject.stream;
 
-  Future<void> loadUserInfo() async {
+  Future<void>  loadUserInfo() async {
     final userId = FirebaseAuth.instance.currentUser?.uid;
 
     if (userId != null) {

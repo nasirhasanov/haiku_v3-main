@@ -14,7 +14,7 @@ class UserInfoService {
         final UserInfoModel profileInfo =
             UserInfoModel.fromDocumentSnapshot(documentSnaphot);
         if (userId == AuthUtils().currentUserId) {
-          _saveLocalProfileInfo(profileInfo);
+          saveLocalProfileInfo(profileInfo);
         }
         return profileInfo;
       }
@@ -26,7 +26,7 @@ class UserInfoService {
     }
   }
 
-  void _saveLocalProfileInfo(UserInfoModel userInfo) async {
+  void saveLocalProfileInfo(UserInfoModel userInfo) async {
     var box = Hive.box(AppKeys.userDataBox);
     await box.put(AppKeys.bio, userInfo.bio ?? '');
     await box.put(AppKeys.deviceToken, userInfo.deviceToken ?? '');
