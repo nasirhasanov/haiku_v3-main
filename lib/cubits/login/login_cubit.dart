@@ -11,6 +11,7 @@ class LoginCubit extends Cubit<LoginState> with LoginMixin {
 
   void signIn() async {
     try {
+      emit(LoginLoading());
       final email = await emailStream.first;
       final password = await passwordStream.first;
 

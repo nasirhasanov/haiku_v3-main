@@ -8,7 +8,8 @@ class ClapService {
   static Stream<DocumentSnapshot<Object?>> checkIfClapped(
     String postId,
   ) async* {
-    yield* FirebaseFirestore.instance.collection('claps')
+    yield* FirebaseFirestore.instance
+        .collection('claps')
         .doc('$postId:${AuthUtils().currentUserId}')
         .snapshots();
   }
@@ -48,6 +49,7 @@ class ClapService {
     // Update the author's clap count
     batch.update(authorRef, {
       FirebaseKeys.score: FieldValue.increment(1),
+      FirebaseKeys.popularity: FieldValue.increment(1),
     });
 
     // Add clap record to claps collection
@@ -93,6 +95,7 @@ class ClapService {
     // Decrement the author's clap count
     batch.update(authorRef, {
       FirebaseKeys.score: FieldValue.increment(-1),
+      FirebaseKeys.popularity: FieldValue.increment(-1),
     });
 
     // Remove clap record from claps collection

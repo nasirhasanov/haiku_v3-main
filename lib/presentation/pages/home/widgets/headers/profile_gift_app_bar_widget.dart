@@ -27,7 +27,7 @@ class ProfileAppBarWidget extends StatelessWidget {
               color: AppColors.black,
             ),
             onPressed: () { 
-              Go.to(context, const SettingsPage());
+              Go.to(context, SettingsPage());
              },
           ),
         ),

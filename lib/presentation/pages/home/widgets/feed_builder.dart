@@ -24,14 +24,12 @@ class _FeedBuilderState extends State<FeedBuilder>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return GestureDetector(
-      child: StreamBuilder<List<PostModel>>(
-        stream: widget.stream,
-        builder: (context, snapshot) => FeedListView(
-          scrollController: widget.scrollController,
-          posts: snapshot.data ?? [],
-          onRefresh: widget.onRefresh,
-        ),
+    return StreamBuilder<List<PostModel>>(
+      stream: widget.stream,
+      builder: (context, snapshot) => FeedListView(
+        scrollController: widget.scrollController,
+        posts: snapshot.data ?? [],
+        onRefresh: widget.onRefresh,
       ),
     );
   }

@@ -9,6 +9,8 @@ abstract class UserRepositoryImpl {
   Future<UserInfoModel?> getProfileInfo(String userId);
   Future<bool?> uploadProfilePic(Uint8List userPic);
   Future<bool?> removeProfilePic();
+  Future<bool?> changeBio(String bio);
+  Future<bool?> deleteUser();
 }
 
 class UserRepository implements UserRepositoryImpl {
@@ -30,6 +32,11 @@ class UserRepository implements UserRepositoryImpl {
       _profilePicService.uploadProfilePic(userPic);
 
   @override
-  Future<bool?> removeProfilePic() =>
-      _profilePicService.removeProfilePic();
+  Future<bool?> removeProfilePic() => _profilePicService.removeProfilePic();
+
+  @override
+  Future<bool?> changeBio(String bio) => _userInfoService.changeUserBio(bio);
+
+  @override
+  Future<bool?> deleteUser() => _userInfoService.deleteThisUserInfo();
 }

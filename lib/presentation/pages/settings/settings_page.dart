@@ -3,97 +3,115 @@ import 'package:flutter/material.dart';
 import 'package:haiku/utilities/constants/app_texts.dart';
 import 'package:haiku/utilities/helpers/go.dart';
 import 'package:haiku/utilities/helpers/pager.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsPage extends StatelessWidget {
-  const SettingsPage({super.key});
+  SettingsPage({super.key});
+
+  final Uri termsUrl = Uri.parse(AppTexts.urlTermsOfService);
+  final Uri privacyUrl = Uri.parse(AppTexts.urlPrivacyPolicy);
 
   @override
   Widget build(BuildContext context) {
+    Future<void> _launchUrl(Uri uri) async {
+      if (!await launchUrl(uri)) {
+        throw Exception('Could not launch $uri');
+      }
+    }
+
+    String? encodeQueryParameters(Map<String, String> params) {
+      return params.entries
+          .map((MapEntry<String, String> e) =>
+              '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+          .join('&');
+    }
+
+    final Uri emailLaunchUri = Uri(
+      scheme: 'mailto',
+      path: 'nasir.hasanov55@gmail.com',
+      query: encodeQueryParameters(<String, String>{
+        'subject': 'Haiku Support Request',
+      }),
+    );
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Settings'),
+        title: const Text(AppTexts.settings),
       ),
       body: ListView(
         children: <Widget>[
-          ListTile(
-            title: const Text('Account Settings',
+          const ListTile(
+            title: Text(AppTexts.accountSettings,
                 style: TextStyle(fontWeight: FontWeight.bold)),
+          ),
+          ListTile(
+            title: const Text(AppTexts.changeBio),
             onTap: () {
-              // Navigate to account settings screen
+              Go.to(context, Pager.changeBio);
             },
           ),
           ListTile(
-            title: const Text('Change Bio'),
+            title: const Text(AppTexts.changePassword),
             onTap: () {
-              // Navigate to change bio screen
+              Go.to(context, Pager.changePassword);
             },
           ),
           ListTile(
-            title: const Text('Change Password'),
-            onTap: () {
-              // Navigate to change password screen
-            },
-          ),
-          ListTile(
-            title: const Text('Delete Account',
+            title: const Text(AppTexts.deleteAccount,
                 style: TextStyle(color: Colors.red)),
             onTap: () {
-              // Navigate to delete account screen
+              Go.to(context, Pager.deleteAccount);
             },
           ),
           const Divider(),
-          ListTile(
-            title: const Text('Support',
-                style: TextStyle(fontWeight: FontWeight.bold)),
-            onTap: () {
-              // Navigate to support screen
-            },
-          ),
-          ListTile(
-            title: const Text('Contact Us'),
-            onTap: () {
-              // Navigate to contact us screen
-            },
-          ),
-          const Divider(),
-          ListTile(
-            title: const Text('About',
-                style: TextStyle(fontWeight: FontWeight.bold)),
-            onTap: () {
-              // Navigate to about screen
-            },
-          ),
-          ListTile(
-            title: const Text('Terms of Service'),
-            onTap: () {
-              // Navigate to terms of service screen
-            },
-          ),
-          ListTile(
-            title: const Text('Privacy Policy'),
-            onTap: () {
-              // Navigate to privacy policy screen
-            },
-          ),
           const ListTile(
-            title: Text('App Version 1.0.16',
-                style: TextStyle(color: Colors.grey)),
+            title: Text(AppTexts.support,
+                style: TextStyle(fontWeight: FontWeight.bold)),
+          ),
+          ListTile(
+            title: const Text(AppTexts.contactUs),
+            onTap: () {
+              _launchUrl(emailLaunchUri);
+            },
           ),
           const Divider(),
-          ListTile(
-            title: const Text('App Settings',
+          const ListTile(
+            title: Text(AppTexts.about,
                 style: TextStyle(fontWeight: FontWeight.bold)),
+          ),
+          ListTile(
+            title: const Text(AppTexts.termsOfService),
             onTap: () {
-              // Navigate to app settings screen
+              _launchUrl(termsUrl);
             },
           ),
           ListTile(
-            title: const Text('Sign Out', style: TextStyle(color: Colors.red)),
+            title: const Text(AppTexts.privacyPolicy),
+            onTap: () {
+              _launchUrl(privacyUrl);
+            },
+          ),
+          FutureBuilder<PackageInfo>(
+              future: PackageInfo.fromPlatform(),
+              builder: (context, snapshot) {
+                return  ListTile(
+                  title: Text('${AppTexts.appVersion} ${snapshot.data?.version}',
+                      style: const TextStyle(color: Colors.grey)),
+                );
+              }),
+          const Divider(),
+          const ListTile(
+            title: Text(AppTexts.appSettings,
+                style: TextStyle(fontWeight: FontWeight.bold)),
+          ),
+          ListTile(
+            title: const Text(AppTexts.signOut, style: TextStyle(color: Colors.red)),
             onTap: () {
               FirebaseAuth.instance.signOut().then((_) {
                 Go.closeAll(context, Pager.home);
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('User Logged Out')),
+                  const SnackBar(content: Text(AppTexts.userLoggedOut)),
                 );
               }).catchError((error) {
                 ScaffoldMessenger.of(context).showSnackBar(

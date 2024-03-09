@@ -4,6 +4,8 @@ import '../../../../../utilities/constants/app_colors.dart';
 import '../../../../../utilities/constants/app_paddings.dart';
 import '../../../../../utilities/constants/app_text_styles.dart';
 import '../../../../../utilities/constants/app_texts.dart';
+import '../../../../../utilities/helpers/go.dart';
+import '../../../../../utilities/helpers/pager.dart';
 import '../tab_bar_widget.dart';
 
 class FeedAppBarWidget extends StatelessWidget {
@@ -21,19 +23,22 @@ class FeedAppBarWidget extends StatelessWidget {
       title: const Text(
         AppTexts.stories,
         style: TextStyle(
-          color: AppColors.black, 
+          color: AppColors.black,
         ),
       ),
       centerTitle: false,
       surfaceTintColor: AppColors.white,
       titleTextStyle: AppTextStyles.normalGrey22,
       bottom: TabBarWidget(tabController: _tabController),
-      actions: const [
-        Padding(
-          padding: AppPaddings.r16,
-          child: Icon(
-            Icons.thumbs_up_down,
-            color: AppColors.black,
+      actions: [
+        GestureDetector(
+          onTap: () => Go.to(context, Pager.showBestAuthors),
+          child: const Padding(
+            padding: AppPaddings.r16,
+            child: Icon(
+              Icons.thumbs_up_down,
+              color: AppColors.black,
+            ),
           ),
         ),
       ],

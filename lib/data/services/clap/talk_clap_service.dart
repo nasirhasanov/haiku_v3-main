@@ -7,7 +7,8 @@ class TalkClapService {
   static Stream<DocumentSnapshot<Object?>> checkIfClapped(
     String talkId,
   ) async* {
-    yield* FirebaseFirestore.instance.collection('claps')
+    yield* FirebaseFirestore.instance
+        .collection('claps')
         .doc('$talkId:${AuthUtils().currentUserId}')
         .snapshots();
   }
@@ -47,6 +48,7 @@ class TalkClapService {
     // Update the author's clap count
     batch.update(authorRef, {
       FirebaseKeys.score: FieldValue.increment(1),
+      FirebaseKeys.popularity: FieldValue.increment(1),
     });
 
     // Add clap record to claps collection
@@ -92,6 +94,7 @@ class TalkClapService {
     // Decrement the author's clap count
     batch.update(authorRef, {
       FirebaseKeys.score: FieldValue.increment(-1),
+      FirebaseKeys.popularity: FieldValue.increment(-1),
     });
 
     // Remove clap record from claps collection

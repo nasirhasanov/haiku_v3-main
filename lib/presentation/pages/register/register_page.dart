@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:haiku/presentation/pages/register/widgets/inputs/register_password_input.dart';
 import 'package:haiku/presentation/pages/register/widgets/signin_prompt.dart';
 import 'package:haiku/presentation/pages/register/widgets/terms_and_privacy_text.dart';
+import 'package:haiku/presentation/widgets/global/global_loading.dart';
 import 'package:haiku/utilities/helpers/go.dart';
 import 'package:haiku/utilities/helpers/pager.dart';
 
@@ -29,11 +30,12 @@ class RegisterPage extends StatelessWidget {
             if (state is RegisterSuccess) {
               Go.back(context);
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Account Created!')),
+                const SnackBar(content: Text(AppTexts.accountCreated)),
               );
             } else if (state is RegisterFailure) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.error ?? 'Registration Failed')),
+                SnackBar(
+                    content: Text(state.error ?? AppTexts.registrationFailed)),
               );
             }
             // Handle other states if necessary
@@ -60,7 +62,15 @@ class RegisterPage extends StatelessWidget {
                       Go.replace(context, Pager.login);
                     }),
                 const Spacer(flex: 3),
-                const RegisterButton(),
+                BlocBuilder<RegisterCubit, RegisterState>(
+                  builder: (context, state) {
+                    if (cubit.state is RegisterLoading) {
+                      return const GlobalLoading();
+                    } else {
+                      return const RegisterButton();
+                    }
+                  },
+                ),
                 AppSizedBoxes.h20
               ],
             ),

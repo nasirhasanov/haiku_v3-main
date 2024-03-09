@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:haiku/cubits/account/account_cubit.dart';
 import 'package:haiku/cubits/author/author_profile_cubit.dart';
+import 'package:haiku/cubits/best/best_authors_cubit.dart';
 import 'package:haiku/cubits/talks/talks_cubit.dart';
 import 'package:haiku/cubits/user/profile_cubit.dart';
+import 'package:haiku/presentation/pages/account/views/change_bio_screen.dart';
+import 'package:haiku/presentation/pages/account/views/change_password_screen.dart';
+import 'package:haiku/presentation/pages/account/views/delete_account_screen.dart';
 import 'package:haiku/presentation/pages/add/add_post_page.dart';
 import 'package:haiku/presentation/pages/author/author_profile_page.dart';
+import 'package:haiku/presentation/pages/best/best_of_the_week.dart';
 import 'package:haiku/presentation/pages/home/views/show_profile_pic_full_screen.dart';
 import 'package:haiku/presentation/pages/talks/talks_page.dart';
 
@@ -69,5 +75,25 @@ class Pager {
   static Widget showProfilePic({
     required String profilePicUrl,
   }) =>
-       ShowProfilePicFullScreen(imageUrl: profilePicUrl);
+      ShowProfilePicFullScreen(imageUrl: profilePicUrl);
+
+  static Widget get changeBio => BlocProvider(
+        create: (context) => ProfileCubit(),
+        child: const ChangeBioPage(),
+      );
+
+  static Widget get changePassword => BlocProvider(
+        create: (context) => AccountCubit(),
+        child: const ChangePasswordPage(),
+      );
+
+  static Widget get deleteAccount => BlocProvider(
+        create: (context) => AccountCubit(),
+        child: const DeleteAccountPage(),
+      );
+
+  static Widget get showBestAuthors => BlocProvider(
+        create: (context) => BestAuthorsCubit()..getBestAuthors(),
+        child: const BestOfTheWeek(),
+      );
 }

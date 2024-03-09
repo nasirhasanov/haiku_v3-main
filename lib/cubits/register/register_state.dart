@@ -7,6 +7,8 @@ abstract class RegisterState extends Equatable {
 
 final class RegisterInitial extends RegisterState {}
 
+final class RegisterLoading extends RegisterState {}
+
 class RegisterSuccess extends RegisterState {
   final User? user;
 

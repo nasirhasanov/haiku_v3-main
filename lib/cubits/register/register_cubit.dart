@@ -15,6 +15,8 @@ class RegisterCubit extends Cubit<RegisterState> with RegisterMixin {
 
   void signUp() async {
     try {
+      emit(RegisterLoading());
+      
       final email = await emailStream.first;
       final password = await passwordStream.first;
       final username = await usernameStream.first;

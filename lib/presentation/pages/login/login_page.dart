@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:haiku/presentation/pages/login/widgets/login_password_input.dart';
 import 'package:haiku/presentation/pages/register/widgets/signin_prompt.dart';
+import 'package:haiku/presentation/widgets/global/global_loading.dart';
 import 'package:haiku/utilities/helpers/go.dart';
 import 'package:haiku/utilities/helpers/pager.dart';
 
@@ -58,7 +59,10 @@ class LoginPage extends StatelessWidget {
                         Go.replace(context, Pager.register);
                       }),
                   const Spacer(flex: 2),
-                  const LoginButton(),
+                  if (loginCubit.state is LoginLoading)
+                    const GlobalLoading()
+                  else
+                    const LoginButton(),
                   TextButton(
                     onPressed: () => loginCubit.resetPassword(),
                     child: const Text('Reset Password'),

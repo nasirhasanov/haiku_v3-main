@@ -38,7 +38,12 @@ class ProfileCubit extends Cubit<ProfileState> with ProfileMixin {
     return await _userInfoService.uploadProfilePic(uploadPic);
   }
 
-    Future<bool?> removeUserPic() async {
+  Future<bool?> removeUserPic() async {
     return await _userInfoService.removeProfilePic();
   }
+
+  Future<bool?> changeBio(String bio) async {
+    return await _userInfoService.changeBio(bio);
+  }
+
 }

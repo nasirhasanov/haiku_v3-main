@@ -14,6 +14,9 @@ class AppTexts {
   static const String email = 'Email';
   static const String username = 'Username';
   static const String password = 'Password';
+  static const String oldPassword = 'Old password';
+  static const String newPassword = 'New password';
+  static const String newPasswordAgain = 'New password again';
   static const String passwordWarning =
       'Password should be at least 6 characters';
   static const String emailInputWarning = 'Enter a valid email';
@@ -44,6 +47,30 @@ class AppTexts {
   static const String photoChanged = 'Photo Changed';
   static const String photoRemoved = 'Photo Removed';
   static const String profilePicture = 'Profile Picture';
+  static const String changeBio = 'Change Bio';
+  static const String change = 'Change';
+  static const String failedChangeBio = 'Failed to change bio.';
+  static const String bioChanged = 'Bio changed';
+  static const String changePassword = 'Change Password';
+  static const String passwordChanged = 'Password changed';
+  static const String passwordsNotSame = 'Passwords are not Password';
+  static const String deleteAccount = 'Delete Account';
+  static const String deleteAccountDescription =
+      'Your all data will be deleted. To continue, enter your password';
+  static const String delete = 'Delete';
+  static const String accountDeleted = 'Account Deleted!';
+  static const String support = 'Support';
+  static const String contactUs = 'Contact Us';
+  static const String about = 'About';
+  static const String appVersion = 'App Version';
+  static const String appSettings = 'App Settings';
+  static const String signOut = 'Sign Out';
+  static const String userLoggedOut = 'User Logged Out';
+  static const String settings = 'Settings';
+  static const String accountSettings = 'Account Settings';
+  static const String accountCreated = 'Account Created!';
+  static const String registrationFailed= 'Registration Failed';
+  static const String bestOfTheWeek= 'Best of The Week';
 
   static const String urlTermsOfService =
       'https://haiku-production-server.web.app/Terms&Conditions.html';
