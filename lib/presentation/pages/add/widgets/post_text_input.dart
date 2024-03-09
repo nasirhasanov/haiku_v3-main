@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:haiku/utilities/constants/app_colors.dart';
 import 'package:haiku/utilities/helpers/text_input_max_lines_formatter.dart';
 
 class PostTextInput extends StatelessWidget {
@@ -15,6 +16,7 @@ class PostTextInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 4,
+      surfaceTintColor: AppColors.white,
       child: TextField(
         onChanged: onChanged,
         maxLength: 100,

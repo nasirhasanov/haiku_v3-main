@@ -15,6 +15,7 @@ class ProfileInfoAppBarWidget extends StatelessWidget {
       floating: false,
       pinned: true,
       backgroundColor: AppColors.white,
+      surfaceTintColor: AppColors.white,
       flexibleSpace: FlexibleSpaceBar(
         titlePadding: AppPaddings.zero,
         title: MyStoriesWithDividerWidget(),

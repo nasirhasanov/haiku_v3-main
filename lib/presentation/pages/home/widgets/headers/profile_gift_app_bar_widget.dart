@@ -13,6 +13,7 @@ class ProfileAppBarWidget extends StatelessWidget {
     return  SliverAppBar(
       pinned: true,
       backgroundColor: AppColors.white,
+      surfaceTintColor: AppColors.white,
       elevation: 0,
       leading: const Icon(
         Icons.wallet_giftcard_rounded,

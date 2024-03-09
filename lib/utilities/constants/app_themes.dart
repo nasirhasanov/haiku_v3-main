@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:haiku/utilities/extensions/color_extensions.dart';
 
+import '../extensions/color_extensions.dart';
 import 'app_colors.dart';
 
 class AppThemes {
