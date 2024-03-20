@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:haiku/utilities/helpers/go.dart';
+import 'package:haiku/utilities/helpers/logger.dart';
 import 'package:haiku/utilities/helpers/pager.dart';
 
 class AuthUtils {
@@ -13,6 +14,7 @@ class AuthUtils {
   AuthUtils._privateConstructor() {
     _firebaseAuth.authStateChanges().listen((User? user) {
       _user = user;
+      showLog('Listened user');
     });
   }
 

@@ -8,6 +8,8 @@ import 'package:haiku/data/services/best/best_users_service.dart';
 import 'package:haiku/data/services/feed/author_posts_service.dart';
 import 'package:haiku/data/services/feed/my_post_service.dart';
 import 'package:haiku/data/services/location/location_service.dart';
+import 'package:haiku/data/services/notification/notification_helper.dart';
+import 'package:haiku/data/services/notification/notification_service.dart';
 import 'package:haiku/data/services/post/delete_post_service.dart';
 import 'package:haiku/data/services/talks/talks_service.dart';
 import 'package:haiku/data/services/user/update_user_data_service.dart';
@@ -46,6 +48,8 @@ Future<void> setupLocator() async {
   locator.registerLazySingleton(() => AuthorPostService());
   locator.registerLazySingleton(() => UpdateUserDataService());
   locator.registerLazySingleton(() => BestUsersService());
+  locator.registerLazySingleton(() => NotificationHelper());
+  locator.registerLazySingleton(() => NotificationService());
 
   locator.registerLazySingleton<PostContract>(() => PostRepository(
         locator<NewPostService>(),

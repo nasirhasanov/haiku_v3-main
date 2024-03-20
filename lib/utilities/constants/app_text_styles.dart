@@ -30,6 +30,12 @@ class AppTextStyles {
     fontStyle: FontStyle.normal,
   );
 
+  static const TextStyle normalBlack20 = TextStyle(
+    fontSize: 20,
+    color: AppColors.black,
+    fontStyle: FontStyle.normal,
+  );
+
   static const TextStyle normalBlack24 = TextStyle(
     fontSize: 24,
     color: AppColors.black,

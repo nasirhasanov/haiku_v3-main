@@ -8,13 +8,12 @@ class BestUsersService {
 
   Future<List<UserInfoModel>?> getBestOfWeekUsers() async {
     try {
-          print('Service called');
-
+      print('Service called');
 
       final List<UserInfoModel> usersList = [];
 
       Query query = _usersCollection
-          .orderBy(FirebaseKeys.score, descending: true)
+          .orderBy(FirebaseKeys.popularity, descending: true)
           .limit(10);
 
       final querySnapshot = await query.get();

@@ -1,6 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:haiku/cubits/login/login_mixin.dart';
+import 'package:haiku/data/services/user/user_info_service.dart';
+import 'package:haiku/locator.dart';
 import 'package:haiku/utilities/constants/app_texts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -8,6 +10,9 @@ part 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> with LoginMixin {
   LoginCubit() : super(LoginInitial());
+
+    late final userInfoService = locator<UserInfoService>();
+
 
   void signIn() async {
     try {
@@ -24,6 +29,8 @@ class LoginCubit extends Cubit<LoginState> with LoginMixin {
         password: password,
       );
       emit(LoginSuccess(credential.user));
+      
+      userInfoService.updateMessagingToken();
 
       print('User Logged In');
     } on FirebaseAuthException catch (e) {

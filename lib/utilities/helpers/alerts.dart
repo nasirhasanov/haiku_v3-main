@@ -21,94 +21,99 @@ class Alerts {
 
   static void showProfilePhoto(BuildContext context, String userId) {
     showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) {
-          return FutureBuilder<UserInfoModel?>(
-              future: UserInfoService().getProfileInfo(userId),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  // Optionally handle the loading state
-                  return const GlobalLoading();
-                }
+      context: context,
+      barrierDismissible: false,
+      builder: (_) {
+        return FutureBuilder<UserInfoModel?>(
+          future: UserInfoService().getProfileInfo(userId),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              // Optionally handle the loading state
+              return const GlobalLoading();
+            }
 
-                if (snapshot.hasError || snapshot.data == null) {
-                  // Optionally handle the error or null data state
-                  return const Text('Failed to load user info');
-                }
+            if (snapshot.hasError || snapshot.data == null) {
+              // Optionally handle the error or null data state
+              return const Text('Failed to load user info');
+            }
 
-                UserInfoModel userInfo = snapshot.data!;
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      padding: AppPaddings.a16,
-                      margin: AppPaddings.h16,
-                      decoration: AppDecorations.whiteA24,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
+            UserInfoModel userInfo = snapshot.data!;
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: AppPaddings.a16,
+                  margin: AppPaddings.h16,
+                  decoration: AppDecorations.whiteA24,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      ProfilePhotoWidget(
+                        imageRadius: 100,
+                        imageUrl: userInfo.profilePicPath,
+                      ),
+                      AppSizedBoxes.h16,
+                      Text(
+                        userInfo.userName ?? '',
+                        style: AppTextStyles.normalBlack24,
+                      ),
+                      AppSizedBoxes.h10,
+                      Text(
+                        userInfo.bio ?? '',
+                        style: AppTextStyles.normalGrey20,
+                      ),
+                      AppSizedBoxes.h10,
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                           ProfilePhotoWidget(
-                            imageRadius: 100,
-                            imageUrl: userInfo.profilePicPath ,
-                          ),
-                          AppSizedBoxes.h16,
-                           Text(
-                            userInfo.userName ?? '',
+                          Text(
+                            userInfo.score.toString(),
                             style: AppTextStyles.normalBlack24,
                           ),
-                          AppSizedBoxes.h10,
-                           Text(userInfo.bio ?? '',
-                            style: AppTextStyles.normalGrey20,
-                          ),
-                          AppSizedBoxes.h10,
-                           Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(userInfo.score.toString(),
-                                style: AppTextStyles.normalBlack24,
-                              ),
-                              AppSizedBoxes.w8,
-                              const PostIconWidget(
-                                  icon: AppAssets.clapFilled,
-                                  color: AppColors.gold),
-                            ],
-                          ),
-                          AppSizedBoxes.h16,
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.white,
-                                foregroundColor: AppColors.purple,
-                                padding: AppPaddings.a16 + AppPaddings.h16,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: AppRadiuses.a24,
-                                )),
-                            onPressed: () {
-                              Go.replace(context, Pager.showAuthor(authorId: userId));
-                            },
-                            child: const Text(AppTexts.showAuthor),
-                          ),
+                          AppSizedBoxes.w8,
+                          const PostIconWidget(
+                              icon: AppAssets.clapFilled,
+                              color: AppColors.gold),
                         ],
                       ),
-                    ),
-                    AppSizedBoxes.h48,
-                    Material(
-                      color: AppColors.transparent,
-                      child: IconButton(
-                        onPressed: () => Go.back(context),
-                        iconSize: 60,
-                        splashRadius: 0.1,
-                        color: AppColors.white,
-                        icon: const Icon(Icons.close_rounded),
+                      AppSizedBoxes.h16,
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.white,
+                            foregroundColor: AppColors.purple,
+                            padding: AppPaddings.a16 + AppPaddings.h16,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: AppRadiuses.a24,
+                            )),
+                        onPressed: () {
+                          Go.replace(
+                              context, Pager.showAuthor(authorId: userId));
+                        },
+                        child: const Text(AppTexts.showAuthor),
                       ),
-                    ),
-                  ],
-                );
-              });
-        });
+                    ],
+                  ),
+                ),
+                AppSizedBoxes.h48,
+                Material(
+                  color: AppColors.transparent,
+                  child: IconButton(
+                    onPressed: () => Go.back(context),
+                    iconSize: 60,
+                    splashRadius: 0.1,
+                    color: AppColors.white,
+                    icon: const Icon(Icons.close_rounded),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
   }
 }

@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:haiku/cubits/register/register_mixin.dart';
 import 'package:haiku/data/services/user/update_user_data_service.dart';
+import 'package:haiku/data/services/user/user_info_service.dart';
 import 'package:haiku/locator.dart';
 import 'package:haiku/utilities/constants/app_texts.dart';
 
@@ -12,6 +13,8 @@ class RegisterCubit extends Cubit<RegisterState> with RegisterMixin {
   RegisterCubit() : super(RegisterInitial());
 
   late final userDataService = locator<UpdateUserDataService>();
+  late final userInfoService = locator<UserInfoService>();
+
 
   void signUp() async {
     try {
@@ -36,7 +39,10 @@ class RegisterCubit extends Cubit<RegisterState> with RegisterMixin {
 
         if (result) {
           emit(RegisterSuccess(credential.user));
+          userInfoService.updateMessagingToken();
         }
+
+        
       } else {
         emit(RegisterFailure(error: AppTexts.anErrorOccurred));
       }

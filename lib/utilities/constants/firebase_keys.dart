@@ -42,6 +42,7 @@ class FirebaseKeys {
   static const uid = 'uid';
   static const email = 'email';
   static const bio = 'bio';
+  static const deviceToken = 'deviceToken';
 
 // Firebase Storage folder names
   static const profilePicFolder = 'profilePictures/'; 

@@ -30,4 +30,7 @@ class AppKeys {
   static const seeProfilePhoto = 'see_profile_photo';
   static const chooseAnotherPic = 'choose_another_pic';
   static const removeProfilePic = 'remove_profile_pic';
+
+  // Firebase Messaging Key
+  static const serverKey = 'AAAADUJlQn0:APA91bG4YCa5834bgHmHVGKjLG7OPpqgSZ6UrLUOtwqW7zn83MJpWKHgkCRPGnoo61y3N1yKWyB0dZiGM1V1uPAfql0uDR7ah_qO-NkpJHyDRriEz4KOduUxI3KBrt9x5zctkIb31Mop';
 }

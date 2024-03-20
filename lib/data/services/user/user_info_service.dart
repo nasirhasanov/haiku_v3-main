@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:haiku/data/models/user_info_model.dart';
 import 'package:haiku/utilities/constants/app_keys.dart';
 import 'package:haiku/utilities/constants/firebase_keys.dart';
@@ -34,6 +35,22 @@ class UserInfoService {
       try {
         await _usersCollection.doc(userId).update({
           FirebaseKeys.bio: bioText,
+        });
+        return true;
+      } on FirebaseException {
+        return false;
+      }
+    }
+    return false;
+  }
+
+  Future<bool?> updateMessagingToken() async {
+    final userId = AuthUtils().currentUserId;
+    if (userId != null) {
+      try {
+        String? token = await FirebaseMessaging.instance.getToken();
+        await _usersCollection.doc(userId).update({
+          FirebaseKeys.deviceToken: token,
         });
         return true;
       } on FirebaseException {

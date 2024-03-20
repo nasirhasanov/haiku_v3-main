@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:haiku/data/services/notification/notification_helper.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -19,6 +20,8 @@ void main() async {
   Hive.init(appDocumentDir.path);
   await Hive.openBox(AppKeys.locationBox);
   await Hive.openBox(AppKeys.userDataBox);
+
+  NotificationHelper().initialize();
 
   runApp(const MyApp());
 }
