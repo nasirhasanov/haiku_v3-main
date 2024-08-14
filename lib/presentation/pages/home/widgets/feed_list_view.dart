@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:haiku/data/services/clap/clap_service.dart';
+import 'package:haiku/data/services/notifications/notifications_service.dart';
 import 'package:haiku/data/services/post/delete_post_service.dart';
 import 'package:haiku/data/services/user/user_info_service.dart';
 import 'package:haiku/utilities/constants/app_keys.dart';
@@ -9,6 +10,7 @@ import 'package:haiku/utilities/helpers/bottom_sheet_dialogs.dart';
 import 'package:haiku/utilities/helpers/go.dart';
 import 'package:haiku/utilities/helpers/pager.dart';
 import 'package:haiku/utilities/helpers/toast.dart';
+import 'package:hive/hive.dart';
 import 'package:nil/nil.dart';
 
 import '../../../../data/models/post_model.dart';
@@ -109,11 +111,19 @@ class _FeedListViewState extends State<FeedListView> {
                   });
                 },
                 onTapLike: () {
-                  AuthUtils().handleAuthenticatedAction(context, () {
+                  AuthUtils().handleAuthenticatedAction(context, () async {
                     ClapService.addClap(
                       post.postId,
                       UserInfoService.getInfo(AppKeys.username) ?? '',
                       post.userId,
+                    );
+                     
+                    NotificationsService.addNotification(
+                      fromId: AuthUtils().currentUserId, 
+                      toId: post.userId,
+                      notificationText: AppTexts.likedYourHaiku,
+                      fromUsername: Hive.box(AppKeys.userDataBox).get(AppKeys.username),
+                      type: 'post_clapped'
                     );
                   });
                 },

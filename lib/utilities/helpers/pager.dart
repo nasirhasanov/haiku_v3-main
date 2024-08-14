@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:haiku/cubits/account/account_cubit.dart';
 import 'package:haiku/cubits/author/author_profile_cubit.dart';
 import 'package:haiku/cubits/best/best_authors_cubit.dart';
+import 'package:haiku/cubits/notifications/notification_cubit.dart';
 import 'package:haiku/cubits/talks/talks_cubit.dart';
 import 'package:haiku/cubits/user/profile_cubit.dart';
 import 'package:haiku/presentation/pages/account/views/change_bio_screen.dart';
@@ -31,6 +32,9 @@ class Pager {
           ),
           BlocProvider(
             create: (context) => ProfileCubit()..loadProfile(),
+          ),
+          BlocProvider(
+            create: (context) => NotificationCubit()..getAllNotifications(),
           )
         ],
         child: const HomePage(),

@@ -38,6 +38,14 @@ class BottomNavBarWidget extends StatelessWidget {
                   ),
                   const Spacer(),
                   NavBarIcon(
+                    onTap: () => cubit.onTapNotifications(),
+                    icon: AppAssets.noNotification,
+                    color: activeIcon == NavBarIconEnum.notifications
+                        ? AppColors.purple
+                        : AppColors.grey,
+                  ),
+                  const Spacer(),
+                  NavBarIcon(
                     onTap: () => cubit.onTapProfile(),
                     icon: AppAssets.profile,
                     color: activeIcon == NavBarIconEnum.profile

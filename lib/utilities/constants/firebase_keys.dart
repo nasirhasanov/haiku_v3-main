@@ -6,6 +6,7 @@ class FirebaseKeys {
   static const users = 'users';
   static const claps = 'claps';
   static const talks = 'talks';
+  static const notifications = 'notifications';
 
   // Fields
   static const time = 'time';
@@ -26,9 +27,9 @@ class FirebaseKeys {
   static const longitude = 'longitude';
 
 // Talk document fields
-  static const commentText = 'comment_text';  
-  static const posterIdForTalk = 'poster_id';  
-  static const timestamp = 'timestamp';  
+  static const commentText = 'comment_text';
+  static const posterIdForTalk = 'poster_id';
+  static const timestamp = 'timestamp';
 
 // Clap detail fields
   static const clappedPostId = 'clappedPostId';
@@ -45,7 +46,12 @@ class FirebaseKeys {
   static const deviceToken = 'deviceToken';
 
 // Firebase Storage folder names
-  static const profilePicFolder = 'profilePictures/'; 
+  static const profilePicFolder = 'profilePictures/';
 
-
+// Notification document fields
+  static const fromId = 'from_id';
+  static const toId = 'to_id';
+  static const notificationText = 'notification_text';
+  static const notificationType = 'notification_type';
+  static const fromUsername = 'from_username';
 }

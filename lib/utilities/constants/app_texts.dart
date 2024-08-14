@@ -71,6 +71,8 @@ class AppTexts {
   static const String accountCreated = 'Account Created!';
   static const String registrationFailed= 'Registration Failed';
   static const String bestOfTheWeek= 'Best of The Week';
+  static const String notificationsTitle= 'Notifications';
+  static const String likedYourHaiku= ' liked your Haiku';
 
   static const String urlTermsOfService =
       'https://haiku-production-server.web.app/Terms&Conditions.html';

@@ -3,11 +3,13 @@ import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
 import 'package:haiku/data/repository/location_repository.dart';
+import 'package:haiku/data/repository/notifications_repository.dart';
 import 'package:haiku/data/repository/talks_repository.dart';
 import 'package:haiku/data/services/best/best_users_service.dart';
 import 'package:haiku/data/services/feed/author_posts_service.dart';
 import 'package:haiku/data/services/feed/my_post_service.dart';
 import 'package:haiku/data/services/location/location_service.dart';
+import 'package:haiku/data/services/notifications/notifications_service.dart';
 import 'package:haiku/data/services/post/delete_post_service.dart';
 import 'package:haiku/data/services/talks/talks_service.dart';
 import 'package:haiku/data/services/user/update_user_data_service.dart';
@@ -46,6 +48,7 @@ Future<void> setupLocator() async {
   locator.registerLazySingleton(() => AuthorPostService());
   locator.registerLazySingleton(() => UpdateUserDataService());
   locator.registerLazySingleton(() => BestUsersService());
+  locator.registerLazySingleton(() => NotificationsService());
 
   locator.registerLazySingleton<PostContract>(() => PostRepository(
         locator<NewPostService>(),
@@ -58,11 +61,14 @@ Future<void> setupLocator() async {
   locator.registerLazySingleton<UserRepositoryImpl>(() =>
       UserRepository(locator<ProfilePicService>(), locator<UserInfoService>()));
 
-  locator.registerLazySingleton<LocationRepositoryImpl>(() =>
-      LocationRepository(locator<LocationService>()));
+  locator.registerLazySingleton<LocationRepositoryImpl>(
+      () => LocationRepository(locator<LocationService>()));
 
-    locator.registerLazySingleton<TalksRepositoryImpl>(() =>
-      TalksRepository(locator<TalksService>()));    
+  locator.registerLazySingleton<TalksRepositoryImpl>(
+      () => TalksRepository(locator<TalksService>()));
+
+  locator.registerLazySingleton<NotificationRepositoryImpl>(
+      () => NotificationRepository(locator<NotificationsService>()));
 
   locator.registerLazySingleton<AuthContract>(() => AuthRepository(
         locator<UsernameService>(),

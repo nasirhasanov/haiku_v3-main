@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:haiku/presentation/pages/home/views/create_account_prompt_view.dart';
+import 'package:haiku/presentation/pages/home/views/notifications_view.dart';
 import 'package:haiku/presentation/pages/home/views/profile_view.dart';
 import 'package:haiku/utilities/enums/nav_bar_icon_enum.dart';
 import 'package:haiku/utilities/helpers/auth_utils.dart';
@@ -24,6 +25,9 @@ abstract class BaseHomeStateWidget<HomePage extends StatefulWidget>
     AuthUtils().userStream.listen((user) {
       pages.value = {
         NavBarIconEnum.home: FeedView(tabController: tabController),
+        NavBarIconEnum.notifications: NotificationsPage(
+          tabController: tabController,
+        ),
         NavBarIconEnum.profile: user != null
             ? ProfileView(tabController: tabController)
             : CreateAccountPromptView(tabController: tabController),
@@ -37,6 +41,4 @@ abstract class BaseHomeStateWidget<HomePage extends StatefulWidget>
     tabController.dispose();
     super.dispose();
   }
-
 }
-

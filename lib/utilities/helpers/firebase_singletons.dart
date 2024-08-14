@@ -8,6 +8,7 @@ class FirebaseSingletons {
   late final CollectionReference _postsCollection;
   late final CollectionReference _clapsCollection;
   late final CollectionReference _talksCollection;
+  late final CollectionReference _notificationsCollection;
 
   FirebaseSingletons._internal() {
     _usersCollection =
@@ -17,7 +18,9 @@ class FirebaseSingletons {
     _clapsCollection =
         locator<FirebaseFirestore>().collection(FirebaseKeys.claps);
     _talksCollection =
-        locator<FirebaseFirestore>().collection(FirebaseKeys.talks);
+        locator<FirebaseFirestore>().collection(FirebaseKeys.talks);    
+    _notificationsCollection =
+        locator<FirebaseFirestore>().collection(FirebaseKeys.notifications);
   }
 
   factory FirebaseSingletons() {
@@ -28,4 +31,5 @@ class FirebaseSingletons {
   static CollectionReference get postsCollection => _instance._postsCollection;
   static CollectionReference get clapsCollection => _instance._clapsCollection;
   static CollectionReference get talksCollection => _instance._talksCollection;
+  static CollectionReference get notificationsCollection => _instance._notificationsCollection;
 }

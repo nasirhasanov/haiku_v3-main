@@ -14,6 +14,12 @@ mixin HomeMixin {
     }
   }
 
+  void onTapNotifications() {
+    if (activeIcon.value != NavBarIconEnum.notifications) {
+      activeIcon.add(NavBarIconEnum.notifications);
+    }
+  }
+
   void onTapProfile() {
     if (activeIcon.value != NavBarIconEnum.profile) {
       activeIcon.add(NavBarIconEnum.profile);
