@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:haiku/data/models/notification_model.dart';
 import 'package:haiku/presentation/widgets/app/notifications/notification_widget.dart';
-import 'package:haiku/presentation/widgets/global/global_divider.dart';
 import 'package:haiku/presentation/widgets/global/global_loading.dart';
 import 'package:haiku/utilities/extensions/list_extensions.dart';
 import 'package:haiku/utilities/helpers/toast.dart';
@@ -28,36 +27,25 @@ class _NotificationsListViewState extends State<NotificationsListView> {
   Widget build(BuildContext context) {
     return RefreshIndicator.adaptive(
       onRefresh: widget.onRefresh ?? () async {},
-      child: SingleChildScrollView(
-        controller: widget.scrollController,
+      child: ListView.builder(
+        shrinkWrap: false,
+        itemCount: widget.notifications.paginatedLength,
         physics: const AlwaysScrollableScrollPhysics(),
-        child: ListView.separated(
-          shrinkWrap: true,
-          itemCount: widget.notifications.paginatedLength,
-          physics: const NeverScrollableScrollPhysics(),
-          separatorBuilder: (context, index) =>
-              const GlobalDivider.horizontal(left: 70),
-          itemBuilder: (context, index) {
-            final isSuccess = index < widget.notifications.length;
-            final isLoading = index == widget.notifications.length;
-            if (isSuccess) {
-              final notification = widget.notifications[index];
-              return NotificationWidget(
-                notificationId: notification.notificationId,
-                timestamp: notification.timeStamp,
-                notificationText: notification.notificationText,
-                notificationPicPath: notification.fromProfilePicPath,
-                fromId: notification.fromId,
-                notificationType: notification.type,
-                onTapNotification: () =>
-                    Toast.show('Notification Clicked', context),
-              );
-            } else if (isLoading) {
-              return const GlobalLoading();
-            }
-            return nil;
-          },
-        ),
+        itemBuilder: (context, index) {
+          final isSuccess = index < widget.notifications.length;
+          final isLoading = index == widget.notifications.length;
+          if (isSuccess) {
+            final notification = widget.notifications[index];
+            return NotificationWidget(
+              notification: notification,
+              onTapNotification: () =>
+                  Toast.show('Notification Clicked', context),
+            );
+          } else if (isLoading) {
+            return const GlobalLoading();
+          }
+          return nil;
+        },
       ),
     );
   }
