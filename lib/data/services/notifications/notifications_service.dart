@@ -50,6 +50,7 @@ class NotificationsService {
     String? notificationText,
     String? fromUsername,
     String type = '',
+    String? clappedPostId,
   }) async {
     if (fromId != null && toId != null && notificationText != null) {
       final notificationDoc = {
@@ -58,6 +59,7 @@ class NotificationsService {
         FirebaseKeys.notificationText: notificationText,
         FirebaseKeys.notificationType: type,
         FirebaseKeys.fromUsername: fromUsername,
+        FirebaseKeys.clappedPostId: clappedPostId,
         FirebaseKeys.timestamp: FieldValue.serverTimestamp(),
       };
 

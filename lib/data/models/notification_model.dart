@@ -8,11 +8,13 @@ class NotificationModel {
   String? notificationText;
   Timestamp timeStamp;
   String? type;
+  String? clappedPostId;
   String? fromProfilePicPath;
 
   NotificationModel({
     required this.notificationId,
     required this.timeStamp,
+    this.clappedPostId,
     this.fromId,
     this.toId,
     this.fromUserName,
@@ -34,6 +36,7 @@ class NotificationModel {
       notificationText: data['notification_text'],
       timeStamp: data['timestamp'],
       type: data['notification_type'],
+      clappedPostId: data['clappedPostId'],
       fromProfilePicPath: data['from_profile_pic_path'],
     );
   }

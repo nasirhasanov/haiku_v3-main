@@ -2,12 +2,18 @@ enum NotificationType {
   postClapped,
 }
 
+extension NotificationTypeExtension on NotificationType {
+  String get name {
+    switch (this) {
+      case NotificationType.postClapped:
+        return 'post_clapped';
+      // Add more cases as needed
+    }
+  }
+}
 
-
-NotificationType? toType(String? type) {
-  final Map<String, NotificationType> typeMap = {
-    'post_clapped': NotificationType.postClapped,
-    // Add more mappings as needed
-  };
-  return typeMap[type];
+NotificationType fromName(String? name) {
+  return NotificationType.values.firstWhere(
+    (type) => type.name == name,
+  );
 }

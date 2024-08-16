@@ -5,6 +5,7 @@ import 'package:haiku/data/services/post/delete_post_service.dart';
 import 'package:haiku/data/services/user/user_info_service.dart';
 import 'package:haiku/utilities/constants/app_keys.dart';
 import 'package:haiku/utilities/constants/app_texts.dart';
+import 'package:haiku/utilities/enums/notification_type_enum.dart';
 import 'package:haiku/utilities/helpers/bottom_options_provider.dart';
 import 'package:haiku/utilities/helpers/bottom_sheet_dialogs.dart';
 import 'package:haiku/utilities/helpers/go.dart';
@@ -123,7 +124,8 @@ class _FeedListViewState extends State<FeedListView> {
                       toId: post.userId,
                       notificationText: AppTexts.likedYourHaiku,
                       fromUsername: Hive.box(AppKeys.userDataBox).get(AppKeys.username),
-                      type: 'post_clapped'
+                      type: NotificationType.postClapped.name,
+                      clappedPostId: post.postId
                     );
                   });
                 },

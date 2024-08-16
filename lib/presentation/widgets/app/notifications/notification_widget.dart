@@ -24,7 +24,7 @@ class NotificationWidget extends StatelessWidget {
     return Padding(
       padding: AppPaddings.h16 + AppPaddings.v32,
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center, 
         children: [
           StreamBuilder(
               stream: ProfilePicService.getProfilePicURLStream(
@@ -41,8 +41,11 @@ class NotificationWidget extends StatelessWidget {
                 );
               }),
           AppSizedBoxes.w16,
-          PostStoryTextWidget(
-              text: getNotificationText(toType(notification?.type))),
+          Expanded(
+            child: PostStoryTextWidget(
+              text: getNotificationText(fromName(notification?.type)),
+            ),
+          ),
           AppSizedBoxes.w16,
         ],
       ),
