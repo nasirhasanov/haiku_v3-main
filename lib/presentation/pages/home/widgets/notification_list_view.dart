@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:haiku/data/models/notification_model.dart';
 import 'package:haiku/presentation/widgets/app/notifications/notification_widget.dart';
 import 'package:haiku/presentation/widgets/global/global_loading.dart';
+import 'package:haiku/utilities/enums/notification_type_enum.dart';
 import 'package:haiku/utilities/extensions/list_extensions.dart';
+import 'package:haiku/utilities/helpers/go.dart';
+import 'package:haiku/utilities/helpers/pager.dart';
 import 'package:haiku/utilities/helpers/toast.dart';
 import 'package:nil/nil.dart';
 
@@ -38,8 +41,7 @@ class _NotificationsListViewState extends State<NotificationsListView> {
             final notification = widget.notifications[index];
             return NotificationWidget(
               notification: notification,
-              onTapNotification: () =>
-                  Toast.show('Notification Clicked', context),
+              onTapNotification: () => onTapNotification(notification),
             );
           } else if (isLoading) {
             return const GlobalLoading();
@@ -48,5 +50,22 @@ class _NotificationsListViewState extends State<NotificationsListView> {
         },
       ),
     );
+  }
+
+  void onTapNotification(NotificationModel? notification) {
+    if (notification != null) {
+      switch (fromName(notification.type)) {
+        case NotificationType.postClapped:
+          Go.to(
+              context,
+              Pager.talks(
+                postId: notification.clappedPostId!,
+                posterId: notification.toId!,
+              ));
+          break;
+        default:
+          break;
+      }
+    }
   }
 }

@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:haiku/data/contracts/post_contract.dart';
+import 'package:haiku/data/models/post_model.dart';
 import 'package:haiku/data/models/talk_model.dart';
 import 'package:haiku/data/repository/talks_repository.dart';
 import 'package:haiku/locator.dart';
@@ -24,6 +26,7 @@ class TalksCubit extends Cubit<TalksState> {
     try {
       emit(TalksLoading());
       await Future.wait([
+        getPost(),
         getTalks(),
       ]);
       emit(TalksSuccess());
@@ -50,6 +53,8 @@ class TalksCubit extends Cubit<TalksState> {
 
   late final _contract = locator<TalksRepositoryImpl>();
 
+  late final _postContract = locator<PostContract>();
+
   late final ScrollController talksScrollController = ScrollController();
 
   final List<TalkModel> _talks = [];
@@ -60,11 +65,25 @@ class TalksCubit extends Cubit<TalksState> {
 
   ValueStream<List<TalkModel>> get talksStream => _talksSubject.stream;
 
+  late final BehaviorSubject<PostModel?> postInfoSubject =
+      BehaviorSubject<PostModel?>();
+
+  Stream<PostModel?> get postInfoStream => postInfoSubject.stream;
+
   void listenToMyPostScroll() =>
       talksScrollController.addListener(_loadMoreTalks);
 
   void _loadMoreTalks() {
     if (talksScrollController.isLastItem && !_isRefresh) getTalks();
+  }
+
+  Future<void> getPost() async {
+    final postInfo = await _postContract.getPost(postId);
+    if (postInfo != null) {
+      postInfoSubject.sink.add(postInfo);
+    } else {
+      postInfoSubject.sink.add(null);
+    }
   }
 
   Future<void> getTalks({

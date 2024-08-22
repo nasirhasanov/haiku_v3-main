@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:haiku/cubits/talks/talks_cubit.dart';
+import 'package:haiku/data/models/post_model.dart';
 import 'package:haiku/presentation/pages/home/widgets/talks_builder.dart';
 import 'package:haiku/presentation/pages/talks/widgets.dart/talk_input_field.dart';
+import 'package:haiku/presentation/widgets/app/talks/post_widget_for_talks.dart';
 import 'package:haiku/presentation/widgets/global/global_loading.dart';
 import 'package:haiku/utilities/constants/app_texts.dart';
 import 'package:haiku/utilities/helpers/toast.dart';
@@ -32,6 +34,22 @@ class _TalksPageState extends State<TalksPage> {
           } else if (state is TalksSuccess) {
             return Column(
               children: [
+                StreamBuilder<PostModel?>(
+                    stream: talksCubit.postInfoStream,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData && snapshot.data == null) {
+                        return const Center(
+                          child: Text('Some Error occurred'),
+                        );
+                      } else {
+                        return PostWidgetForTalks(
+                          postModel: snapshot.data!,
+                          onTapLike: () {},
+                          onTapUnLike: () {},
+                          onTapProfileImage: () {},
+                        );
+                      }
+                    }),
                 Expanded(
                   child: TalksBuilder(
                     stream: talksCubit.talksStream,

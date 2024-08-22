@@ -8,8 +8,6 @@ import 'package:haiku/utilities/helpers/firebase_singletons.dart';
 class MyPostService {
   late final _postsCollection = FirebaseSingletons.postsCollection;
 
-
-
   Future<(List<PostModel>?, DocumentSnapshot?)> getMyPosts({
     DocumentSnapshot? lastDocument,
   }) async {
@@ -31,7 +29,6 @@ class MyPostService {
         lastDocument = querySnapshot.docs.last;
 
         await Future.forEach(querySnapshot.docs, (doc) async {
-
           postList.add(PostModel.fromDocumentSnapshot(doc));
         });
 
@@ -42,6 +39,22 @@ class MyPostService {
     } catch (e) {
       print(e);
       throw Exception(e);
+    }
+  }
+
+  Future<PostModel?> getPost({required String postId}) async {
+    try {
+      final documentSnaphot = await _postsCollection.doc(postId).get();
+      if (documentSnaphot.exists) {
+        final PostModel post = PostModel.fromDocumentSnapshot(documentSnaphot);
+
+        return post;
+      }
+      print('Post is null');
+      return null;
+    } catch (e) {
+      print(e);
+      return null;
     }
   }
 }

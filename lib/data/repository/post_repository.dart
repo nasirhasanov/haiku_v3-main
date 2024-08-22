@@ -49,6 +49,10 @@ class PostRepository implements PostContract {
     DocumentSnapshot? lastDocument,
   }) =>
       _authorPostsService.getAuthorPosts(
-        authorId: authorId,
-        lastDocument: lastDocument);
+          authorId: authorId, lastDocument: lastDocument);
+
+  @override
+  Future<PostModel?> getPost(String postId) =>
+        _myPostsService.getPost(postId: postId);
+
 }

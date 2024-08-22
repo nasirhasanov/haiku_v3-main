@@ -125,6 +125,7 @@ class _FeedListViewState extends State<FeedListView> {
                       notificationText: AppTexts.likedYourHaiku,
                       fromUsername: Hive.box(AppKeys.userDataBox).get(AppKeys.username),
                       type: NotificationType.postClapped.name,
+                      clapperId: AuthUtils().currentUserId,
                       clappedPostId: post.postId
                     );
                   });

@@ -19,4 +19,5 @@ abstract class PostContract {
     required String authorId,
     DocumentSnapshot? lastDocument,
   });
+  Future<PostModel?> getPost(String postId);
 }

@@ -23,31 +23,34 @@ class NotificationWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: AppPaddings.h16 + AppPaddings.v32,
-      child: Row(
-      crossAxisAlignment: CrossAxisAlignment.center, 
-        children: [
-          StreamBuilder(
-              stream: ProfilePicService.getProfilePicURLStream(
-                  notification?.fromId),
-              builder: (context, snapshot) {
-                String? image;
-                if (snapshot.data?.data() != null) {
-                  image = (snapshot.data?.data()
-                      as Map<String, dynamic>)[FirebaseKeys.profilePicPath];
-                }
-                return ProfilePhotoWidget(
-                  imageRadius: 20,
-                  imageUrl: image,
-                );
-              }),
-          AppSizedBoxes.w16,
-          Expanded(
-            child: PostStoryTextWidget(
-              text: getNotificationText(fromName(notification?.type)),
+      child: GestureDetector(
+        onTap: onTapNotification,
+        child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center, 
+          children: [
+            StreamBuilder(
+                stream: ProfilePicService.getProfilePicURLStream(
+                    notification?.fromId),
+                builder: (context, snapshot) {
+                  String? image;
+                  if (snapshot.data?.data() != null) {
+                    image = (snapshot.data?.data()
+                        as Map<String, dynamic>)[FirebaseKeys.profilePicPath];
+                  }
+                  return ProfilePhotoWidget(
+                    imageRadius: 20,
+                    imageUrl: image,
+                  );
+                }),
+            AppSizedBoxes.w16,
+            Expanded(
+              child: PostStoryTextWidget(
+                text: getNotificationText(fromName(notification?.type)),
+              ),
             ),
-          ),
-          AppSizedBoxes.w16,
-        ],
+            AppSizedBoxes.w16,
+          ],
+        ),
       ),
     );
   }
