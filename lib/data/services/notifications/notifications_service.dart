@@ -44,7 +44,7 @@ class NotificationsService {
     }
   }
 
-  static Future<bool> addNotification({
+  static Future<bool> addClapNotification({
     String? fromId,
     String? toId,
     String? notificationText,
@@ -68,7 +68,8 @@ class NotificationsService {
       try {
         FirebaseFirestore.instance
             .collection(FirebaseKeys.notifications)
-            .add(notificationDoc);
+            .doc('$type:$fromId:$clappedPostId')
+            .set(notificationDoc);
         return true; // Success
       } catch (e) {
         print(e); // Log the error

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:haiku/data/models/post_model.dart';
 import 'package:haiku/presentation/widgets/app/post/widgets/photo_story_like_widget.dart';
 import 'package:haiku/presentation/widgets/app/post/widgets/post_time_text_widget.dart';
+import 'package:haiku/presentation/widgets/global/global_divider.dart';
 import 'package:haiku/utilities/extensions/timestamp_extensions.dart';
 
 import '../../../../utilities/constants/app_paddings.dart';
 import '../../../../utilities/constants/app_sized_boxes.dart';
-
 
 class PostWidgetForTalks extends StatelessWidget {
   const PostWidgetForTalks({
@@ -14,9 +14,8 @@ class PostWidgetForTalks extends StatelessWidget {
     required this.postModel,
     required this.onTapLike,
     required this.onTapUnLike,
-    required this.onTapProfileImage, 
+    required this.onTapProfileImage,
   });
-
 
   final Function() onTapLike;
   final Function() onTapUnLike;
@@ -46,6 +45,7 @@ class PostWidgetForTalks extends StatelessWidget {
             child: PostTimeTextWidget(time: postModel.timeStamp.customTimeAgo),
           ),
           AppSizedBoxes.h20,
+          const GlobalDivider.horizontal(height: 1)
         ],
       ),
     );

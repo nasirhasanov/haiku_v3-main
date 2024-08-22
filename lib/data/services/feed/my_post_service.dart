@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:haiku/data/models/post_model.dart';
 import 'package:haiku/utilities/constants/firebase_keys.dart';
 import 'package:haiku/utilities/helpers/auth_utils.dart';

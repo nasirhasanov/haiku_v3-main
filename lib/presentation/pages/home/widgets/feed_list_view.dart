@@ -119,7 +119,7 @@ class _FeedListViewState extends State<FeedListView> {
                       post.userId,
                     );
                      
-                    NotificationsService.addNotification(
+                    NotificationsService.addClapNotification(
                       fromId: AuthUtils().currentUserId, 
                       toId: post.userId,
                       notificationText: AppTexts.likedYourHaiku,

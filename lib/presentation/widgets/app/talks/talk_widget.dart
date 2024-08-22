@@ -35,7 +35,7 @@ class TalkWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: AppPaddings.h16 + AppPaddings.v32,
+      padding: AppPaddings.h16 + AppPaddings.v12,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -48,7 +48,6 @@ class TalkWidget extends StatelessWidget {
             onTapProfileImage: onTapProfileImage,
             postId: talkId,
           ),
-          AppSizedBoxes.h20,
           AppSizedBoxes.h20,
           Padding(
             padding: AppPaddings.l72,

@@ -6,7 +6,6 @@ import 'package:haiku/utilities/enums/notification_type_enum.dart';
 import 'package:haiku/utilities/extensions/list_extensions.dart';
 import 'package:haiku/utilities/helpers/go.dart';
 import 'package:haiku/utilities/helpers/pager.dart';
-import 'package:haiku/utilities/helpers/toast.dart';
 import 'package:nil/nil.dart';
 
 class NotificationsListView extends StatefulWidget {
