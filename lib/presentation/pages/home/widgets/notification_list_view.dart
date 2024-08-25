@@ -62,6 +62,15 @@ class _NotificationsListViewState extends State<NotificationsListView> {
                 posterId: notification.toId!,
               ));
           break;
+
+        case NotificationType.newTalk:
+          Go.to(
+              context,
+              Pager.talks(
+                postId: notification.commentedPostId!,
+                posterId: notification.toId!,
+              ));
+          break;
         default:
           break;
       }

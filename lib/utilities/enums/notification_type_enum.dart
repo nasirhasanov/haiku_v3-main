@@ -1,5 +1,6 @@
 enum NotificationType {
-  postClapped('post_clapped');
+  postClapped('post_clapped'),
+  newTalk('new_talk');
 
   final String name;
 
@@ -12,6 +13,8 @@ extension NotificationTypeExtension on NotificationType {
       case NotificationType.postClapped:
         return 'post_clapped';
       // Add more cases as needed
+      case NotificationType.newTalk:
+        return 'new_talk';
     }
   }
 }

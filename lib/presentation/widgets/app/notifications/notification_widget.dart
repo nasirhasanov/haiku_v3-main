@@ -22,11 +22,11 @@ class NotificationWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: AppPaddings.h16 + AppPaddings.v32,
+      padding: AppPaddings.h16 + AppPaddings.v20,
       child: GestureDetector(
         onTap: onTapNotification,
         child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center, 
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             StreamBuilder(
                 stream: ProfilePicService.getProfilePicURLStream(
@@ -56,7 +56,18 @@ class NotificationWidget extends StatelessWidget {
   String getNotificationText(NotificationType? type) {
     switch (type) {
       case NotificationType.postClapped:
-        return '${notification?.fromUserName}${notification?.notificationText}';
+        final clappedPostText = notification?.clappedPostText ?? '';
+        final truncatedText = clappedPostText.length > 20
+            ? '${clappedPostText.substring(0, 20)}...👏'
+            : clappedPostText;
+        return '${notification?.fromUserName}${notification?.notificationText}: "$truncatedText"';
+
+      case NotificationType.newTalk:
+        final commentText = notification?.commentText ?? '';
+        final truncatedText = commentText.length > 20
+            ? '${commentText.substring(0, 20)}...💬'
+            : commentText;
+        return '${notification?.fromUserName}${notification?.notificationText}: "$truncatedText"';
       default:
         return '';
     }

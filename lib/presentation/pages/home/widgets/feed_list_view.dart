@@ -119,14 +119,15 @@ class _FeedListViewState extends State<FeedListView> {
                       post.userId,
                     );
                      
-                    NotificationsService.addClapNotification(
+                    NotificationsService.addNotification(
                       fromId: AuthUtils().currentUserId, 
                       toId: post.userId,
                       notificationText: AppTexts.likedYourHaiku,
                       fromUsername: Hive.box(AppKeys.userDataBox).get(AppKeys.username),
                       type: NotificationType.postClapped.name,
                       clapperId: AuthUtils().currentUserId,
-                      clappedPostId: post.postId
+                      clappedPostId: post.postId,
+                      clappedPostText: post.postText
                     );
                   });
                 },

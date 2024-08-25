@@ -73,6 +73,7 @@ class AppTexts {
   static const String bestOfTheWeek= 'Best of The Week';
   static const String notificationsTitle= 'Notifications';
   static const String likedYourHaiku= ' liked your Haiku';
+  static const String talkedAboutYourHaiku= ' talked about your Haiku:';
 
   static const String urlTermsOfService =
       'https://haiku-production-server.web.app/Terms&Conditions.html';

@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:haiku/data/data_sources/remote/firebase/notifications/notifications_service.dart';
 import 'package:haiku/data/models/talk_model.dart';
 import 'package:haiku/utilities/constants/app_keys.dart';
+import 'package:haiku/utilities/constants/app_texts.dart';
 import 'package:haiku/utilities/constants/firebase_keys.dart';
+import 'package:haiku/utilities/enums/notification_type_enum.dart';
 import 'package:haiku/utilities/helpers/auth_utils.dart';
 import 'package:haiku/utilities/helpers/firebase_singletons.dart';
 import 'package:hive/hive.dart';
@@ -50,6 +53,7 @@ class TalksService {
     WriteBatch batch = FirebaseFirestore.instance.batch();
     DocumentReference talkRef = FirebaseSingletons.talksCollection.doc();
     DocumentReference postRef = FirebaseSingletons.postsCollection.doc(postId);
+    String talkDocId = talkRef.id;
 
     final talkDoc = {
       FirebaseKeys.commentText: talkText,
@@ -70,6 +74,19 @@ class TalksService {
       });
 
       await batch.commit();
+
+      NotificationsService.addNotification(
+        fromId: AuthUtils().currentUserId,
+        toId: posterId,
+        notificationText: AppTexts.talkedAboutYourHaiku,
+        fromUsername: Hive.box(AppKeys.userDataBox).get(AppKeys.username),
+        type: NotificationType.newTalk.name,
+        commenterId: AuthUtils().currentUserId,
+        commentedPostId: postId,
+        commentText: talkText,
+        commentId: talkDocId,
+      );
+
       return true; // Success
     } catch (e) {
       print(e); // Log the error

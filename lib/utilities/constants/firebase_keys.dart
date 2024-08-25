@@ -54,4 +54,8 @@ class FirebaseKeys {
   static const notificationText = 'notification_text';
   static const notificationType = 'notification_type';
   static const fromUsername = 'from_username';
+  static const clappedPostText = 'clapped_post_text';
+  static const commentId = 'comment_id';
+  static const commentedPostId = 'commented_post_id';
+  static const commenterId = 'commenter_id';
 }
