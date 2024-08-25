@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:haiku/data/services/user/profile_pic_service.dart';
+import 'package:haiku/data/data_sources/remote/firebase/user/profile_pic_service.dart';
 import 'package:haiku/utilities/constants/firebase_keys.dart';
 
 import '../../../../../utilities/constants/app_sized_boxes.dart';

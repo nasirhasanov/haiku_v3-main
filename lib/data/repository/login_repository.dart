@@ -1,4 +1,4 @@
-import 'package:haiku/data/services/auth/login_service.dart';
+import 'package:haiku/data/data_sources/remote/firebase/auth/login_service.dart';
 import 'package:haiku/locator.dart';
 
 abstract class LoginRepositoryImpl {

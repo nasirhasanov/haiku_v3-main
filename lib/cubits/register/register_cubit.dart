@@ -2,8 +2,8 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:haiku/cubits/register/register_mixin.dart';
-import 'package:haiku/data/services/user/update_user_data_service.dart';
-import 'package:haiku/data/services/user/user_info_service.dart';
+import 'package:haiku/data/data_sources/remote/firebase/user/update_user_data_service.dart';
+import 'package:haiku/data/data_sources/remote/firebase/user/user_info_service.dart';
 import 'package:haiku/locator.dart';
 import 'package:haiku/utilities/constants/app_texts.dart';
 

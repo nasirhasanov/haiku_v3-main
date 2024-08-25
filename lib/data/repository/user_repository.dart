@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:haiku/data/models/user_info_model.dart';
-import 'package:haiku/data/services/user/user_info_service.dart';
+import 'package:haiku/data/data_sources/remote/firebase/user/user_info_service.dart';
 
-import '../services/user/profile_pic_service.dart';
+import '../data_sources/remote/firebase/user/profile_pic_service.dart';
 
 abstract class UserRepositoryImpl {
   Future<String?> getProfilePicURL(String userId);

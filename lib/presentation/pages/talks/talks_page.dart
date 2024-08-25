@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:haiku/cubits/talks/talks_cubit.dart';
+import 'package:haiku/data/data_sources/remote/firebase/clap/clap_service.dart';
+import 'package:haiku/data/data_sources/remote/firebase/user/user_info_service.dart';
 import 'package:haiku/data/models/post_model.dart';
 import 'package:haiku/presentation/pages/home/widgets/talks_builder.dart';
 import 'package:haiku/presentation/pages/talks/widgets.dart/talk_input_field.dart';
 import 'package:haiku/presentation/widgets/app/talks/post_widget_for_talks.dart';
 import 'package:haiku/presentation/widgets/global/global_loading.dart';
+import 'package:haiku/utilities/constants/app_keys.dart';
 import 'package:haiku/utilities/constants/app_texts.dart';
+import 'package:haiku/utilities/helpers/auth_utils.dart';
 import 'package:haiku/utilities/helpers/toast.dart';
 import 'package:nil/nil.dart';
 
@@ -37,16 +41,32 @@ class _TalksPageState extends State<TalksPage> {
                 StreamBuilder<PostModel?>(
                     stream: talksCubit.postInfoStream,
                     builder: (context, snapshot) {
-                      if (snapshot.hasData && snapshot.data == null) {
-                        return const Center(
-                          child: Text('Some Error occurred'),
-                        );
-                      } else {
+                      if (snapshot.hasData && snapshot.data != null) {
                         return PostWidgetForTalks(
                           postModel: snapshot.data!,
-                          onTapLike: () {},
-                          onTapUnLike: () {},
+                          onTapLike: () {
+                            AuthUtils().handleAuthenticatedAction(context,
+                                () async {
+                              ClapService.addClap(
+                                snapshot.data!.postId,
+                                UserInfoService.getInfo(AppKeys.username) ?? '',
+                                snapshot.data!.userId,
+                              );
+                            });
+                          },
+                          onTapUnLike: () {
+                            AuthUtils().handleAuthenticatedAction(context, () {
+                              ClapService.removeClap(
+                                snapshot.data!.postId,
+                                snapshot.data!.userId,
+                              );
+                            });
+                          },
                           onTapProfileImage: () {},
+                        );
+                      } else {
+                        return const Center(
+                          child: Text('Some Error occurred'),
                         );
                       }
                     }),

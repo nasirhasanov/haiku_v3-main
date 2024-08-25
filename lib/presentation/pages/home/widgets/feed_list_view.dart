@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:haiku/data/services/clap/clap_service.dart';
-import 'package:haiku/data/services/notifications/notifications_service.dart';
-import 'package:haiku/data/services/post/delete_post_service.dart';
-import 'package:haiku/data/services/user/user_info_service.dart';
+import 'package:haiku/data/data_sources/remote/firebase/clap/clap_service.dart';
+import 'package:haiku/data/data_sources/remote/firebase/notifications/notifications_service.dart';
+import 'package:haiku/data/data_sources/remote/firebase/post/delete_post_service.dart';
+import 'package:haiku/data/data_sources/remote/firebase/user/user_info_service.dart';
 import 'package:haiku/utilities/constants/app_keys.dart';
 import 'package:haiku/utilities/constants/app_texts.dart';
 import 'package:haiku/utilities/enums/notification_type_enum.dart';

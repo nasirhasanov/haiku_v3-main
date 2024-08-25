@@ -31,14 +31,15 @@ class LocationService {
       if (placemarks.isNotEmpty) {
         Placemark place = placemarks[0];
         var box = Hive.box(AppKeys.locationBox);
-        await box.put(AppKeys.countryCode, place.isoCountryCode ?? '');
-        await box.put(AppKeys.subLocality, place.subLocality ?? '');
-        await box.put(
-            AppKeys.administrativeArea, place.administrativeArea ?? '');
-        await box.put(AppKeys.street, place.street ?? '');
-        await box.put(AppKeys.name, place.name ?? '');
-        await box.put(AppKeys.latitude, position.latitude);
-        await box.put(AppKeys.longitude, position.longitude);
+        await Future.wait([
+          box.put(AppKeys.countryCode, place.isoCountryCode ?? ''),
+          box.put(AppKeys.subLocality, place.subLocality ?? ''),
+          box.put(AppKeys.administrativeArea, place.administrativeArea ?? ''),
+          box.put(AppKeys.street, place.street ?? ''),
+          box.put(AppKeys.name, place.name ?? ''),
+          box.put(AppKeys.latitude, position.latitude),
+          box.put(AppKeys.longitude, position.longitude),
+        ]);
       }
     } catch (e) {
       print(e);

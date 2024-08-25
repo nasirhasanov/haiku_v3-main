@@ -1,5 +1,9 @@
 enum NotificationType {
-  postClapped,
+  postClapped('post_clapped');
+
+  final String name;
+
+  const NotificationType(this.name);
 }
 
 extension NotificationTypeExtension on NotificationType {

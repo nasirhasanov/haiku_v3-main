@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:haiku/cubits/user/profile_cubit.dart';
 import 'package:haiku/data/models/user_info_model.dart';
-import 'package:haiku/data/services/post/add_new_post_service.dart';
+import 'package:haiku/data/data_sources/remote/firebase/post/add_new_post_service.dart';
 import 'package:haiku/presentation/pages/add/widgets/post_text_input.dart';
 import 'package:haiku/presentation/widgets/global/global_divider.dart';
 import 'package:haiku/presentation/widgets/global/global_loading.dart';

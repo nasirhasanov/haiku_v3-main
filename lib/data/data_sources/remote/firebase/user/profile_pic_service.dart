@@ -4,7 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:haiku/utilities/constants/firebase_keys.dart';
 import 'package:haiku/utilities/helpers/auth_utils.dart';
 
-import '../../../utilities/helpers/firebase_singletons.dart';
+import '../../../../../utilities/helpers/firebase_singletons.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProfilePicService {

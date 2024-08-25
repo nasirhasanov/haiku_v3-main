@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:haiku/data/models/talk_model.dart';
-import 'package:haiku/data/services/talks/talks_service.dart';
+import 'package:haiku/data/data_sources/remote/firebase/talks/talks_service.dart';
 
 abstract class TalksRepositoryImpl {
   Future<(List<TalkModel>?, DocumentSnapshot?)> getTalks({

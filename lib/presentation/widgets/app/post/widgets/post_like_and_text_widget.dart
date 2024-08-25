@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:haiku/data/services/clap/clap_service.dart';
+import 'package:haiku/data/data_sources/remote/firebase/clap/clap_service.dart';
 
 import '../../../../../utilities/constants/app_assets.dart';
 import '../../../../../utilities/constants/app_colors.dart';

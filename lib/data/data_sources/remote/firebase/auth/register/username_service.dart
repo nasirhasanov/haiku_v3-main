@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
-import '../../../../utilities/helpers/firebase_singletons.dart';
+import '../../../../../../utilities/helpers/firebase_singletons.dart';
 
 class UsernameService {
   late final _usersCollection = FirebaseSingletons.usersCollection;

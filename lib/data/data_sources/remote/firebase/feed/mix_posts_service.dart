@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:haiku/utilities/helpers/firebase_singletons.dart';
 
-import '../../models/post_model.dart';
+import '../../../../models/post_model.dart';
 
 class MixPostsService {
   late final _postsCollection = FirebaseSingletons.postsCollection;

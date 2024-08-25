@@ -1,4 +1,4 @@
-import 'package:haiku/data/services/auth/register/register_service.dart';
+import 'package:haiku/data/data_sources/remote/firebase/auth/register/register_service.dart';
 import 'package:haiku/locator.dart';
 
 abstract class RegisterRepositoryImpl {

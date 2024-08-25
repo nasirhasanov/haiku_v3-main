@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:haiku/data/models/notification_model.dart';
-import 'package:haiku/data/services/user/profile_pic_service.dart';
+import 'package:haiku/data/data_sources/remote/firebase/user/profile_pic_service.dart';
 import 'package:haiku/presentation/widgets/app/post/widgets/post_story_text_widget.dart';
 import 'package:haiku/presentation/widgets/global/profile_photo_widget.dart';
 import 'package:haiku/utilities/constants/app_paddings.dart';
@@ -43,10 +43,8 @@ class NotificationWidget extends StatelessWidget {
                   );
                 }),
             AppSizedBoxes.w16,
-            Expanded(
-              child: PostStoryTextWidget(
-                text: getNotificationText(fromName(notification?.type)),
-              ),
+            PostStoryTextWidget(
+              text: getNotificationText(fromName(notification?.type)),
             ),
             AppSizedBoxes.w16,
           ],

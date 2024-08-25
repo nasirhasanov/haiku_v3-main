@@ -1,5 +1,5 @@
 import 'package:haiku/data/contracts/auth_contract.dart';
-import 'package:haiku/data/services/auth/register/username_service.dart';
+import 'package:haiku/data/data_sources/remote/firebase/auth/register/username_service.dart';
 
 class AuthRepository implements AuthContract {
   AuthRepository(this._usernameService);

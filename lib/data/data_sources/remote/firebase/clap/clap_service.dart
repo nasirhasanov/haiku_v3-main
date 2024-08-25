@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:haiku/utilities/constants/firebase_keys.dart';
 import 'package:haiku/utilities/helpers/firebase_singletons.dart';
 
-import '../../../utilities/helpers/auth_utils.dart';
+import '../../../../../utilities/helpers/auth_utils.dart';
 
 class ClapService {
   static Stream<DocumentSnapshot<Object?>> checkIfClapped(

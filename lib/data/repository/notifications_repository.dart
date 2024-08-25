@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:haiku/data/models/notification_model.dart';
-import 'package:haiku/data/services/notifications/notifications_service.dart';
+import 'package:haiku/data/data_sources/remote/firebase/notifications/notifications_service.dart';
 
 abstract class NotificationRepositoryImpl {
   Future<(List<NotificationModel>?, DocumentSnapshot?)> getNotifications ({

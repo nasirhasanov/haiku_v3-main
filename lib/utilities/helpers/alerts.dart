@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:haiku/data/models/user_info_model.dart';
-import 'package:haiku/data/services/user/user_info_service.dart';
+import 'package:haiku/data/data_sources/remote/firebase/user/user_info_service.dart';
 import 'package:haiku/presentation/widgets/global/global_loading.dart';
 import 'package:haiku/utilities/constants/app_radiuses.dart';
 import 'package:haiku/utilities/constants/app_texts.dart';

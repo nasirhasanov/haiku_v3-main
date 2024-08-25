@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:haiku/data/services/clap/talk_clap_service.dart';
+import 'package:haiku/data/data_sources/remote/firebase/clap/talk_clap_service.dart';
 import 'package:haiku/presentation/widgets/app/post/widgets/post_icon_widget.dart';
 import 'package:haiku/utilities/constants/app_assets.dart';
 import 'package:haiku/utilities/constants/app_colors.dart';

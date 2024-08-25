@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:haiku/utilities/helpers/firebase_singletons.dart';
 
-import '../../../utilities/constants/firebase_keys.dart';
-import '../../models/post_model.dart';
+import '../../../../../utilities/constants/firebase_keys.dart';
+import '../../../../models/post_model.dart';
 
 class NewPostService {
   late final _postsCollection = FirebaseSingletons.postsCollection;

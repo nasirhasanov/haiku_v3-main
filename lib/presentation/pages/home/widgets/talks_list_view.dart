@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:haiku/data/models/talk_model.dart';
-import 'package:haiku/data/services/clap/talk_clap_service.dart';
-import 'package:haiku/data/services/talks/talks_service.dart';
-import 'package:haiku/data/services/user/user_info_service.dart';
+import 'package:haiku/data/data_sources/remote/firebase/clap/talk_clap_service.dart';
+import 'package:haiku/data/data_sources/remote/firebase/talks/talks_service.dart';
+import 'package:haiku/data/data_sources/remote/firebase/user/user_info_service.dart';
 import 'package:haiku/presentation/widgets/app/talks/talk_widget.dart';
 import 'package:haiku/presentation/widgets/global/global_divider.dart';
 import 'package:haiku/presentation/widgets/global/global_loading.dart';

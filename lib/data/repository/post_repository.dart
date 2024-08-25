@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:haiku/data/services/feed/author_posts_service.dart';
-import 'package:haiku/data/services/feed/my_post_service.dart';
+import 'package:haiku/data/data_sources/remote/firebase/feed/author_posts_service.dart';
+import 'package:haiku/data/data_sources/remote/firebase/feed/my_post_service.dart';
 
 import '../contracts/post_contract.dart';
 import '../models/post_model.dart';
-import '../services/feed/local_post_service.dart';
-import '../services/feed/mix_posts_service.dart';
-import '../services/feed/new_post_service.dart';
+import '../data_sources/remote/firebase/feed/local_post_service.dart';
+import '../data_sources/remote/firebase/feed/mix_posts_service.dart';
+import '../data_sources/remote/firebase/feed/new_post_service.dart';
 
 class PostRepository implements PostContract {
   PostRepository(
