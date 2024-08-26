@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:haiku/utilities/helpers/auth_utils.dart';
 
 import '../../../../cubits/home/home_cubit.dart';
 import '../../../../utilities/constants/app_assets.dart';
@@ -37,14 +38,16 @@ class BottomNavBarWidget extends StatelessWidget {
                         : AppColors.grey,
                   ),
                   const Spacer(),
-                  NavBarIcon(
-                    onTap: () => cubit.onTapNotifications(),
-                    icon: AppAssets.noNotification,
-                    color: activeIcon == NavBarIconEnum.notifications
-                        ? AppColors.purple
-                        : AppColors.grey,
-                  ),
-                  const Spacer(),
+                  if (AuthUtils().currentUser != null) ...[
+                    NavBarIcon(
+                      onTap: () => cubit.onTapNotifications(),
+                      icon: AppAssets.noNotification,
+                      color: activeIcon == NavBarIconEnum.notifications
+                          ? AppColors.purple
+                          : AppColors.grey,
+                    ),
+                    const Spacer(),
+                  ],
                   NavBarIcon(
                     onTap: () => cubit.onTapProfile(),
                     icon: AppAssets.profile,

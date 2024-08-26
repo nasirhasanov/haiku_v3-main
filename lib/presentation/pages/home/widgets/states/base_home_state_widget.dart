@@ -25,9 +25,9 @@ abstract class BaseHomeStateWidget<HomePage extends StatefulWidget>
     AuthUtils().userStream.listen((user) {
       pages.value = {
         NavBarIconEnum.home: FeedView(tabController: tabController),
-        NavBarIconEnum.notifications: NotificationsPage(
-          tabController: tabController,
-        ),
+        NavBarIconEnum.notifications: user != null
+            ? NotificationsPage(tabController: tabController)
+            : CreateAccountPromptView(tabController: tabController),
         NavBarIconEnum.profile: user != null
             ? ProfileView(tabController: tabController)
             : CreateAccountPromptView(tabController: tabController),

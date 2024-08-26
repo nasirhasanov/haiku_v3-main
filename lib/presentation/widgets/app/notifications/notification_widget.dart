@@ -67,7 +67,7 @@ class NotificationWidget extends StatelessWidget {
         final truncatedText = commentText.length > 20
             ? '${commentText.substring(0, 20)}...💬'
             : commentText;
-        return '${notification?.fromUserName}${notification?.notificationText}: "$truncatedText"';
+        return '${notification?.fromUserName}${notification?.notificationText} "$truncatedText"';
       default:
         return '';
     }
