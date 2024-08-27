@@ -116,4 +116,65 @@ class Alerts {
       },
     );
   }
+
+  static void showResetPasswordInfoDialog(
+    BuildContext context,
+    bool status,
+    String infoMessage,
+  ) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: double.infinity,
+              padding: AppPaddings.a20,
+              margin: AppPaddings.h24,
+              decoration: AppDecorations.whiteA24,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.info,
+                    size: 100,
+                  ),
+                  AppSizedBoxes.h16,
+                  Text(
+                    infoMessage,
+                    style: AppTextStyles.normalBlack24,
+                    textAlign: TextAlign.center, // Center the text
+                  ),
+                  AppSizedBoxes.h20,
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.white,
+                        foregroundColor: AppColors.purple,
+                        padding: AppPaddings.a16 + AppPaddings.h16,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: AppRadiuses.a24,
+                        )),
+                    onPressed: () {
+                      if (status) {
+                        Go.closeAll(context, Pager.login);
+                      } else {
+                        Go.back(context);
+                      }
+                    },
+                    child: const Text(AppTexts.okGotIt),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }

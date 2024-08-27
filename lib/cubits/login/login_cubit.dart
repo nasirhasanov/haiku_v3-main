@@ -11,8 +11,7 @@ part 'login_state.dart';
 class LoginCubit extends Cubit<LoginState> with LoginMixin {
   LoginCubit() : super(LoginInitial());
 
-    late final userInfoService = locator<UserInfoService>();
-
+  late final userInfoService = locator<UserInfoService>();
 
   void signIn() async {
     try {
@@ -29,7 +28,7 @@ class LoginCubit extends Cubit<LoginState> with LoginMixin {
         password: password,
       );
       emit(LoginSuccess(credential.user));
-      
+
       userInfoService.updateMessagingToken();
 
       print('User Logged In');
@@ -44,7 +43,27 @@ class LoginCubit extends Cubit<LoginState> with LoginMixin {
     }
   }
 
-  resetPassword() {}
+  resetPassword() async {
+    try {
+      emit(LoginLoading());
+
+      final email = await emailStream.first;
+      if (email == null) {
+        emit(LoginFailure(error: AppTexts.pleaseProvideEmail));
+        return;
+      }
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      emit(PasswordResetSent());
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        emit(LoginFailure(error: AppTexts.userNotFound));
+      } else {
+        emit(LoginFailure(error: AppTexts.anErrorOccurred));
+      }
+    } catch (e) {
+      emit(LoginFailure(error: AppTexts.anErrorOccurred));
+    }
+  }
 
   @override
   Future<void> close() {

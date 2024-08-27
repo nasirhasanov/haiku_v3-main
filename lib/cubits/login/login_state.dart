@@ -25,3 +25,5 @@ class LoginFailure extends LoginState {
   @override
   List<Object?> get props => [error];
 }
+
+final class PasswordResetSent extends LoginState {}

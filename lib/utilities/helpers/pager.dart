@@ -13,6 +13,7 @@ import 'package:haiku/presentation/pages/add/add_post_page.dart';
 import 'package:haiku/presentation/pages/author/author_profile_page.dart';
 import 'package:haiku/presentation/pages/best/best_of_the_week.dart';
 import 'package:haiku/presentation/pages/home/views/show_profile_pic_full_screen.dart';
+import 'package:haiku/presentation/pages/login/reset_password_screen.dart';
 import 'package:haiku/presentation/pages/talks/talks_page.dart';
 
 import '../../cubits/home/home_cubit.dart';
@@ -48,6 +49,10 @@ class Pager {
   static Widget get login => BlocProvider(
         create: (context) => LoginCubit(),
         child: const LoginPage(),
+      );
+  static Widget get resetPassword => BlocProvider(
+        create: (context) => LoginCubit(),
+        child: const ResetPasswordScreen(),
       );
 
   static Widget get addPost => BlocProvider(

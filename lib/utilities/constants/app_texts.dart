@@ -10,6 +10,7 @@ class AppTexts {
   static const String myStories = 'My Stories';
   static const String signIn = 'Sign In';
   static const String signUp = 'Sign Up';
+  static const String resetPassword = 'Reset Password';
   static const String createAccount = 'Create Account';
   static const String email = 'Email';
   static const String username = 'Username';
@@ -74,6 +75,12 @@ class AppTexts {
   static const String notificationsTitle= 'Notifications';
   static const String likedYourHaiku= ' liked your Haiku:';
   static const String talkedAboutYourHaiku= ' talked about your Haiku:';
+  static const String userNotFound= 'User not found';
+  static const String pleaseProvideEmail = 'Please provide email';
+  static const String resetPasswordSent= 'Password reset link sent to your email address. Please check your email!';
+  static const String okGotIt = 'Ok, got it';
+  static const String done = 'Done';
+  static const String provideEmailPasswordReset = 'Please enter your email to reset your password!';
 
   static const String urlTermsOfService =
       'https://haiku-production-server.web.app/Terms&Conditions.html';

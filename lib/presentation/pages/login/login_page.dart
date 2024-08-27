@@ -64,8 +64,8 @@ class LoginPage extends StatelessWidget {
                   else
                     const LoginButton(),
                   TextButton(
-                    onPressed: () => loginCubit.resetPassword(),
-                    child: const Text('Reset Password'),
+                    onPressed: () => Go.to(context, Pager.resetPassword),
+                    child: const Text(AppTexts.resetPassword),
                   ),
                 ],
               );
