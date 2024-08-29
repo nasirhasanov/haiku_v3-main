@@ -81,6 +81,7 @@ class AppTexts {
   static const String okGotIt = 'Ok, got it';
   static const String done = 'Done';
   static const String provideEmailPasswordReset = 'Please enter your email to reset your password!';
+  static const String shareAppDescription = 'Check out this post on Haiku app: ';
 
   static const String urlTermsOfService =
       'https://haiku-production-server.web.app/Terms&Conditions.html';
