@@ -62,6 +62,13 @@ class NotificationWidget extends StatelessWidget {
             : clappedPostText;
         return '${notification?.fromUserName}${notification?.notificationText}: "$truncatedText"';
 
+      case NotificationType.talkClapped:
+        final clappedTalkText = notification?.clappedPostText ?? '';
+        final truncatedText = clappedTalkText.length > 20
+            ? '${clappedTalkText.substring(0, 20)}...👏'
+            : clappedTalkText;
+        return '${notification?.fromUserName}${notification?.notificationText}: "$truncatedText"';
+
       case NotificationType.newTalk:
         final commentText = notification?.commentText ?? '';
         final truncatedText = commentText.length > 20

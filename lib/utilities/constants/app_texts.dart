@@ -74,6 +74,7 @@ class AppTexts {
   static const String bestOfTheWeek= 'Best of The Week';
   static const String notificationsTitle= 'Notifications';
   static const String likedYourHaiku= ' liked your Haiku:';
+  static const String likedYourTalk= ' liked your Talk:';
   static const String talkedAboutYourHaiku= ' talked about your Haiku:';
   static const String userNotFound= 'User not found';
   static const String pleaseProvideEmail = 'Please provide email';

@@ -58,6 +58,9 @@ class NotificationsService {
     String? commentText,
     String? commenterId,
   }) async {
+    if(fromId == toId) {
+      return false;
+    }
     if (fromId != null && toId != null && notificationText != null) {
       final notificationDoc = {
         FirebaseKeys.fromId: fromId,
@@ -83,6 +86,10 @@ class NotificationsService {
       String documentId;
       switch (fromName(type)) {
         case NotificationType.postClapped:
+          documentId = '$type:$fromId:$clappedPostId';
+          break;
+
+        case NotificationType.talkClapped:
           documentId = '$type:$fromId:$clappedPostId';
           break;
 

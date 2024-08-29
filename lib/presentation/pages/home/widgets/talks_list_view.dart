@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:haiku/data/data_sources/remote/firebase/notifications/notifications_service.dart';
 import 'package:haiku/data/models/talk_model.dart';
 import 'package:haiku/data/data_sources/remote/firebase/clap/talk_clap_service.dart';
 import 'package:haiku/data/data_sources/remote/firebase/talks/talks_service.dart';
@@ -8,6 +9,7 @@ import 'package:haiku/presentation/widgets/global/global_divider.dart';
 import 'package:haiku/presentation/widgets/global/global_loading.dart';
 import 'package:haiku/utilities/constants/app_keys.dart';
 import 'package:haiku/utilities/constants/app_texts.dart';
+import 'package:haiku/utilities/enums/notification_type_enum.dart';
 import 'package:haiku/utilities/extensions/list_extensions.dart';
 import 'package:haiku/utilities/extensions/timestamp_extensions.dart';
 import 'package:haiku/utilities/helpers/alerts.dart';
@@ -15,6 +17,7 @@ import 'package:haiku/utilities/helpers/auth_utils.dart';
 import 'package:haiku/utilities/helpers/bottom_options_provider.dart';
 import 'package:haiku/utilities/helpers/bottom_sheet_dialogs.dart';
 import 'package:haiku/utilities/helpers/toast.dart';
+import 'package:hive/hive.dart';
 import 'package:nil/nil.dart';
 
 class TalksListView extends StatefulWidget {
@@ -97,6 +100,17 @@ class _TalksListViewState extends State<TalksListView> {
                       UserInfoService.getInfo(AppKeys.username) ?? '',
                       talk.userId,
                     );
+
+                    NotificationsService.addNotification(
+                        fromId: AuthUtils().currentUserId,
+                        toId: talk.userId,
+                        notificationText: AppTexts.likedYourTalk,
+                        fromUsername:
+                            Hive.box(AppKeys.userDataBox).get(AppKeys.username),
+                        type: NotificationType.talkClapped.name,
+                        clapperId: AuthUtils().currentUserId,
+                        clappedPostId: talk.postId,
+                        clappedPostText: talk.commentText);
                   });
                 },
                 onTapProfileImage: () =>
