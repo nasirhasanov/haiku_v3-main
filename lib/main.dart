@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:haiku/utilities/enums/notification_type_enum.dart';
 import 'package:hive/hive.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'locator.dart';
@@ -22,9 +23,6 @@ void main() async {
   Hive.init(appDocumentDir.path);
   await Hive.openBox(AppKeys.locationBox);
   await Hive.openBox(AppKeys.userDataBox);
-
-  log(NotificationType.postClapped.name);
-
 
   runApp(const MyApp());
 }
