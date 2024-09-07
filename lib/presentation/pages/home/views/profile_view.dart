@@ -14,15 +14,35 @@ class ProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubit = context.read<ProfileCubit>();
 
-    return NestedScrollView(
-      headerSliverBuilder: (_, __) => <Widget>[
-        const ProfileAppBarWidget(),
-        const ProfileInfoAppBarWidget(),
-      ],
-      body: FeedBuilder(
-        scrollController: cubit.myPostScrollController,
-        stream: cubit.myPostStream,
-        onRefresh: () async => await cubit.getMyPosts(isRefresh: true),
+    return RefreshIndicator(
+      onRefresh: () async => await cubit.getMyPosts(isRefresh: true),
+      child: CustomScrollView(
+        controller: cubit.myPostScrollController,
+        slivers: [
+          const ProfileAppBarWidget(),
+          const ProfileInfoAppBarWidget(),
+          FeedBuilder(
+            // scrollController: cubit.myPostScrollController,
+            stream: cubit.myPostStream,
+            // onRefresh: () async => await cubit.getMyPosts(isRefresh: true),
+          ),
+        ],
+      ),
+    );
+
+    return RefreshIndicator(
+     onRefresh: () async => await cubit.getMyPosts(isRefresh: true),
+      child: NestedScrollView(
+        controller: cubit.myPostScrollController,
+        headerSliverBuilder: (_, __) => <Widget>[
+          const ProfileAppBarWidget(),
+          const ProfileInfoAppBarWidget(),
+        ],
+        body: FeedBuilder(
+          // scrollController: cubit.myPostScrollController,
+          stream: cubit.myPostStream,
+          // onRefresh: () async => await cubit.getMyPosts(isRefresh: true),
+        ),
       ),
     );
   }

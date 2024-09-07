@@ -12,18 +12,30 @@ class AuthorProfilePage extends StatelessWidget {
     final cubit = context.read<AuthorProfileCubit>();
 
     return Scaffold(
-        appBar: AppBar(        ),
-        body: NestedScrollView(
-          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-            return <Widget>[
-              const AuthorInfoAppBarWidget(),
-            ];
-          },
-          body: FeedBuilder(
-            scrollController: cubit.authorPostScrollController,
+      appBar: AppBar(),
+      // body: NestedScrollView(
+      //   headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+      //     return <Widget>[
+      //       const AuthorInfoAppBarWidget(),
+      //     ];
+      //   },
+      //   body: FeedBuilder(
+      //     scrollController: cubit.authorPostScrollController,
+      //     stream: cubit.authorPostStream,
+      //     onRefresh: () async => await cubit.getAuthorPosts(isRefresh: true),
+      //   ),
+      // ),
+      body: CustomScrollView(
+        controller: cubit.authorPostScrollController,
+        slivers: [
+          const AuthorInfoAppBarWidget(),
+          FeedBuilder(
+            // scrollController: cubit.myPostScrollController,
             stream: cubit.authorPostStream,
-            onRefresh: () async => await cubit.getAuthorPosts(isRefresh: true),
+            // onRefresh: () async => await cubit.getMyPosts(isRefresh: true),
           ),
-        ));
+        ],
+      ),
+    );
   }
 }

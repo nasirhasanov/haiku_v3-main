@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:haiku/utilities/enums/notification_type_enum.dart';
 import 'package:hive/hive.dart';
@@ -24,5 +25,10 @@ void main() async {
   await Hive.openBox(AppKeys.locationBox);
   await Hive.openBox(AppKeys.userDataBox);
 
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+  
   runApp(const MyApp());
 }

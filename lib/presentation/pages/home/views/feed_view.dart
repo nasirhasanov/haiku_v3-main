@@ -28,17 +28,21 @@ class FeedView extends StatelessWidget {
                 FeedBuilder(
                   scrollController: cubit.newPostScrollController,
                   stream: cubit.newPostStream,
-                  onRefresh: () async => await cubit.getNewPosts(isRefresh: true),
+                  onRefresh: () async =>
+                      await cubit.getNewPosts(isRefresh: true),
+                  isSliver: false,
                 ),
                 FeedBuilder(
                   scrollController: cubit.mixPostScrollController,
                   stream: cubit.mixPostStream,
                   onRefresh: () => cubit.getMixPosts(isRefresh: true),
+                  isSliver: false,
                 ),
                 FeedBuilder(
                   scrollController: cubit.localPostScrollController,
                   stream: cubit.localPostStream,
                   onRefresh: () => cubit.getLocalPosts(isRefresh: true),
+                  isSliver: false,
                 ),
               ],
             );
@@ -49,3 +53,21 @@ class FeedView extends StatelessWidget {
     );
   }
 }
+
+
+// return CustomScrollView(
+//       controller: cubit.newPostScrollController,
+//       slivers: [
+//         FeedAppBarWidget(tabController: tabController),
+//         BlocBuilder<HomeCubit, HomeState>(
+//           builder: (context, state) {
+//             if (state is HomeLoading || state is HomeInitial) {
+//               return SliverToBoxAdapter(child: const GlobalLoading());
+//             } else if (state is HomeSuccess) {
+//               return tabList(cubit).elementAt(tabController.index);
+//             }
+//             return SliverToBoxAdapter(child: nil);
+//           },
+//         ),
+//       ],
+//     );
