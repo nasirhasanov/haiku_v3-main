@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:haiku/utilities/constants/app_themes.dart';
 import 'package:haiku/utilities/enums/notification_type_enum.dart';
 import 'package:hive/hive.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
@@ -29,6 +30,7 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  
+  AppThemes.setSystemUIOverlayStyle();
+
   runApp(const MyApp());
 }

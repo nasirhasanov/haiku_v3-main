@@ -3,6 +3,7 @@ import 'package:haiku/presentation/pages/author/widgets/author_info_widget.dart'
 import 'package:haiku/presentation/pages/home/widgets/my_stories_with_divider_widget.dart';
 import 'package:haiku/utilities/constants/app_colors.dart';
 import 'package:haiku/utilities/constants/app_paddings.dart';
+import 'package:haiku/utilities/constants/app_texts.dart';
 
 class AuthorInfoAppBarWidget extends StatelessWidget {
   const AuthorInfoAppBarWidget({super.key});
@@ -17,7 +18,9 @@ class AuthorInfoAppBarWidget extends StatelessWidget {
       backgroundColor: AppColors.white,
       flexibleSpace: FlexibleSpaceBar(
         titlePadding: AppPaddings.zero,
-        title: MyStoriesWithDividerWidget(),
+        title: MyStoriesWithDividerWidget(
+          title: AppTexts.authorStories,
+        ),
         expandedTitleScale: 1.1,
         background: AuthorInfoWidget(),
       ),

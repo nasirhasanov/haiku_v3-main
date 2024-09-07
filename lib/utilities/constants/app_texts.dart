@@ -70,19 +70,23 @@ class AppTexts {
   static const String settings = 'Settings';
   static const String accountSettings = 'Account Settings';
   static const String accountCreated = 'Account Created!';
-  static const String registrationFailed= 'Registration Failed';
-  static const String bestOfTheWeek= 'Best of The Week';
-  static const String notificationsTitle= 'Notifications';
-  static const String likedYourHaiku= ' liked your Haiku:';
-  static const String likedYourTalk= ' liked your Talk:';
-  static const String talkedAboutYourHaiku= ' talked about your Haiku:';
-  static const String userNotFound= 'User not found';
+  static const String registrationFailed = 'Registration Failed';
+  static const String bestOfTheWeek = 'Best of The Week';
+  static const String notificationsTitle = 'Notifications';
+  static const String likedYourHaiku = ' liked your Haiku:';
+  static const String likedYourTalk = ' liked your Talk:';
+  static const String talkedAboutYourHaiku = ' talked about your Haiku:';
+  static const String userNotFound = 'User not found';
   static const String pleaseProvideEmail = 'Please provide email';
-  static const String resetPasswordSent= 'Password reset link sent to your email address. Please check your email!';
+  static const String resetPasswordSent =
+      'Password reset link sent to your email address. Please check your email!';
   static const String okGotIt = 'Ok, got it';
   static const String done = 'Done';
-  static const String provideEmailPasswordReset = 'Please enter your email to reset your password!';
-  static const String shareAppDescription = 'Check out this post on Haiku app: ';
+  static const String provideEmailPasswordReset =
+      'Please enter your email to reset your password!';
+  static const String shareAppDescription =
+      'Check out this post on Haiku app: ';
+  static const String authorStories = 'Author Stories';
 
   static const String urlTermsOfService =
       'https://haiku-production-server.web.app/Terms&Conditions.html';

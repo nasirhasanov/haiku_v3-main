@@ -30,20 +30,5 @@ class ProfileView extends StatelessWidget {
       ),
     );
 
-    return RefreshIndicator(
-     onRefresh: () async => await cubit.getMyPosts(isRefresh: true),
-      child: NestedScrollView(
-        controller: cubit.myPostScrollController,
-        headerSliverBuilder: (_, __) => <Widget>[
-          const ProfileAppBarWidget(),
-          const ProfileInfoAppBarWidget(),
-        ],
-        body: FeedBuilder(
-          // scrollController: cubit.myPostScrollController,
-          stream: cubit.myPostStream,
-          // onRefresh: () async => await cubit.getMyPosts(isRefresh: true),
-        ),
-      ),
-    );
   }
 }

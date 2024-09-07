@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:haiku/utilities/constants/app_texts.dart';
 
 import '../../../../../utilities/constants/app_colors.dart';
 import '../../../../../utilities/constants/app_paddings.dart';
@@ -18,7 +19,7 @@ class ProfileInfoAppBarWidget extends StatelessWidget {
       surfaceTintColor: AppColors.white,
       flexibleSpace: FlexibleSpaceBar(
         titlePadding: AppPaddings.zero,
-        title: MyStoriesWithDividerWidget(),
+        title: MyStoriesWithDividerWidget(title: AppTexts.myStories,),
         expandedTitleScale: 1.1,
         background: ProfileInfoWidget(),
       ),

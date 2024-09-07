@@ -163,7 +163,7 @@ class ProfileInfoWidget extends StatelessWidget {
               toolbarWidgetColor: Colors.white,
               hideBottomControls: true,
               initAspectRatio: CropAspectRatioPreset.square,
-              lockAspectRatio: false),
+              lockAspectRatio: true),
           IOSUiSettings(
             aspectRatioLockEnabled: true,
             rotateButtonsHidden: true,
