@@ -44,6 +44,7 @@ class FirebaseKeys {
   static const email = 'email';
   static const bio = 'bio';
   static const deviceToken = 'deviceToken';
+  static const hasNotifications = 'has_notifications';
 
 // Firebase Storage folder names
   static const profilePicFolder = 'profilePictures/';

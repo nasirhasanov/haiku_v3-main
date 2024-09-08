@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:haiku/data/data_sources/remote/firebase/user/user_info_service.dart';
 import 'package:haiku/utilities/helpers/auth_utils.dart';
 
 import '../../../../cubits/home/home_cubit.dart';
@@ -16,6 +18,8 @@ class BottomNavBarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     HomeCubit cubit = context.read<HomeCubit>();
+    bool hasNotifications = false;
+
     return Material(
       color: AppColors.white,
       elevation: AppSizes.navBarElevation,
@@ -39,12 +43,49 @@ class BottomNavBarWidget extends StatelessWidget {
                   ),
                   const Spacer(),
                   if (AuthUtils().currentUser != null) ...[
-                    NavBarIcon(
-                      onTap: () => cubit.onTapNotifications(),
-                      icon: AppAssets.noNotification,
-                      color: activeIcon == NavBarIconEnum.notifications
-                          ? AppColors.purple
-                          : AppColors.grey,
+                    Stack(
+                      children: [
+                        NavBarIcon(
+                          onTap: () {
+                            cubit.onTapNotifications();
+                            if (hasNotifications) {
+                              UserInfoService().setHasNotificationsFalse();
+                            }
+                          },
+                          icon: AppAssets.noNotification,
+                          color: activeIcon == NavBarIconEnum.notifications
+                              ? AppColors.purple
+                              : AppColors.grey,
+                        ),
+                        // Conditional red dot indicator
+                        StreamBuilder<DocumentSnapshot>(
+                          stream: UserInfoService.hasNotifications(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              hasNotifications = (snapshot.data!.data() as Map<
+                                      String, dynamic>)['has_notifications'] ??
+                                  false;
+                              return Visibility(
+                                visible: hasNotifications,
+                                child: Positioned(
+                                  top: 10,
+                                  right: 10,
+                                  child: Container(
+                                    width: 10,
+                                    height: 10,
+                                    decoration: const BoxDecoration(
+                                      color: Colors.red,
+                                      shape: BoxShape.circle,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
+                            return const SizedBox
+                                .shrink(); // Return empty if no data
+                          },
+                        ),
+                      ],
                     ),
                     const Spacer(),
                   ],

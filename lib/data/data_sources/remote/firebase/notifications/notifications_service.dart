@@ -58,7 +58,7 @@ class NotificationsService {
     String? commentText,
     String? commenterId,
   }) async {
-    if(fromId == toId) {
+    if (fromId == toId) {
       return false;
     }
     if (fromId != null && toId != null && notificationText != null) {
@@ -103,10 +103,14 @@ class NotificationsService {
       }
 
       try {
-        FirebaseFirestore.instance
+        await FirebaseFirestore.instance
             .collection(FirebaseKeys.notifications)
             .doc(documentId)
             .set(notificationDoc);
+
+        FirebaseSingletons.usersCollection
+            .doc(toId)
+            .update({FirebaseKeys.hasNotifications: true});
         return true; // Success
       } catch (e) {
         print(e); // Log the error
@@ -115,4 +119,5 @@ class NotificationsService {
     }
     return false; // Invalid input
   }
+
 }

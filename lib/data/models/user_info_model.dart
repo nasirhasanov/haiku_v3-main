@@ -8,6 +8,7 @@ class UserInfoModel {
   String? deviceToken;
   String? bio;
   String? profilePicPath;
+  bool? hasNotifications;
 
   UserInfoModel({
     this.userName,
@@ -17,6 +18,7 @@ class UserInfoModel {
     this.deviceToken,
     this.bio,
     this.profilePicPath,
+    this.hasNotifications,
   });
 
   factory UserInfoModel.fromDocumentSnapshot(
@@ -32,6 +34,7 @@ class UserInfoModel {
       deviceToken: data['deviceToken'],
       bio: data['bio'],
       profilePicPath: data['profile_pic_path'],
+      hasNotifications: data['has_notifications']
     );
   }
 }

@@ -88,4 +88,18 @@ class UserInfoService {
     var box = Hive.box(AppKeys.userDataBox);
     return box.get(key);
   }
+
+  static Stream<DocumentSnapshot<Object?>> hasNotifications() async* {
+    yield* FirebaseSingletons.usersCollection
+        .doc(AuthUtils().currentUserId)
+        .snapshots();
+  }
+
+ void setHasNotificationsFalse() {
+    FirebaseSingletons.usersCollection.doc(AuthUtils().currentUserId).update({
+      FirebaseKeys.hasNotifications: false,
+    }).catchError((e) {
+      print("Failed to update hasNotifications: $e");
+    });
+  }
 }
