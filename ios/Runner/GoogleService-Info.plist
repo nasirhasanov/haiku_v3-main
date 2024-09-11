@@ -9,7 +9,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.haiku</string>
+	<string>com.haiku.ios</string>
 	<key>PROJECT_ID</key>
 	<string>haiku-production-server</string>
 	<key>STORAGE_BUCKET</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:56948507261:ios:2d99f31d8f889a9f9ce714</string>
+	<string>1:56948507261:ios:f2acdbe5c5cf8c6c9ce714</string>
 </dict>
 </plist>
