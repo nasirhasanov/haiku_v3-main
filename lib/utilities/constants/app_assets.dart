@@ -14,6 +14,7 @@ class AppAssets {
   static const String profileAvatar = '$icons/profile_avatar.png';
   static const String magicBook = '$icons/icon_magic_book.png';
   static const String noNotification = '$icons/ic_no_notification.png';
+  static const String appIcon = '$icons/app_icon.png';
 
   static const String defaultAvatar =
       'https://t4.ftcdn.net/jpg/02/31/65/33/360_F_231653384_VrtTULFyWdcHrN7r9u094cn9k9pIMUXh.jpg';

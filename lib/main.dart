@@ -10,6 +10,7 @@ import 'package:hive/hive.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'data/data_sources/remote/firebase/notifications/notification_helper.dart';
 import 'locator.dart';
 import 'presentation/app.dart';
 import 'utilities/constants/app_keys.dart';
@@ -31,6 +32,8 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
   AppThemes.setSystemUIOverlayStyle();
-
+  // Initialize notifications
+  final notificationHelper = NotificationHelper();
+  await notificationHelper.initialize();
   runApp(const MyApp());
 }
