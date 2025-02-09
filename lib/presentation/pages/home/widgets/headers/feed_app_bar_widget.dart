@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../utilities/constants/app_assets.dart';
 import '../../../../../utilities/constants/app_colors.dart';
 import '../../../../../utilities/constants/app_paddings.dart';
 import '../../../../../utilities/constants/app_text_styles.dart';
@@ -43,11 +44,12 @@ class FeedAppBarWidget extends StatelessWidget {
         ),
         GestureDetector(
           onTap: () => Go.to(context, Pager.showBestAuthors),
-          child: const Padding(
+          child: Padding(
             padding: AppPaddings.r16,
-            child: Icon(
-              Icons.thumbs_up_down,
-              color: AppColors.black,
+            child: Image.asset(
+              AppAssets.bestUsers,
+              width: 36,
+              height: 36,
             ),
           ),
         ),
