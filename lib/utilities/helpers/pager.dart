@@ -19,6 +19,7 @@ import 'package:haiku/presentation/pages/talks/talks_page.dart';
 import '../../cubits/home/home_cubit.dart';
 import '../../cubits/login/login_cubit.dart';
 import '../../cubits/register/register_cubit.dart';
+import '../../presentation/pages/best/search/search_users_page.dart';
 import '../../presentation/pages/home/home_page.dart';
 import '../../presentation/pages/login/login_page.dart';
 import '../../presentation/pages/register/register_page.dart';
@@ -105,4 +106,7 @@ class Pager {
         create: (context) => BestAuthorsCubit()..getBestAuthors(),
         child: const BestOfTheWeek(),
       );
+
+  static Widget get searchUsers => const SearchUsersPage();
+
 }

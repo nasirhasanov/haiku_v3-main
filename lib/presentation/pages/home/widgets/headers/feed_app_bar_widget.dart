@@ -32,6 +32,16 @@ class FeedAppBarWidget extends StatelessWidget {
       bottom: TabBarWidget(tabController: _tabController),
       actions: [
         GestureDetector(
+          onTap: () => Go.to(context, Pager.searchUsers),
+          child: const Padding(
+            padding: AppPaddings.r16,
+            child: Icon(
+              Icons.search,
+              color: AppColors.black,
+            ),
+          ),
+        ),
+        GestureDetector(
           onTap: () => Go.to(context, Pager.showBestAuthors),
           child: const Padding(
             padding: AppPaddings.r16,

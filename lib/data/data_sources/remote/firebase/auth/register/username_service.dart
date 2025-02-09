@@ -25,4 +25,10 @@ class UsernameService {
       return null;
     }
   }
+  static Stream<QuerySnapshot<Object?>> searchUserName(String username) {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .where('username', isEqualTo: username)
+        .snapshots();
+  }
 }

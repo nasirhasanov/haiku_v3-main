@@ -87,6 +87,10 @@ class AppTexts {
   static const String shareAppDescription =
       'Check out this post on Haiku app: ';
   static const String authorStories = 'Author Stories';
+  static const String cancel = 'Cancel';
+  static const String searchUsername = 'Search username';
+  static const String noUsersFound = 'No users found.';
+
 
   static const String urlTermsOfService =
       'https://haiku-production-server.web.app/Terms&Conditions.html';
