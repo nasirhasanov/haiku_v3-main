@@ -21,6 +21,7 @@ class AppKeys {
   static const score = 'score';
   static const userId = 'uid';
   static const username = 'username';
+  static const showReview = 'showReview';
 
   // Bottom sheet option keys
   static const report = 'report';

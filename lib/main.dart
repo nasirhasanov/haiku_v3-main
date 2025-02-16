@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:haiku/utilities/constants/app_themes.dart';
 import 'package:haiku/utilities/enums/notification_type_enum.dart';
+import 'package:haiku/utilities/helpers/app_review_manager.dart';
 import 'package:hive/hive.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:path_provider/path_provider.dart';
@@ -35,5 +36,8 @@ void main() async {
   // Initialize notifications
   final notificationHelper = NotificationHelper();
   await notificationHelper.initialize();
+
+  final reviewManager = AppReviewManager();
+  await reviewManager.checkAndRequestReview();
   runApp(const MyApp());
 }
