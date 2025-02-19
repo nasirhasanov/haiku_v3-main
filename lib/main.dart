@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:haiku/utilities/constants/app_themes.dart';
 import 'package:haiku/utilities/enums/notification_type_enum.dart';
 import 'package:haiku/utilities/helpers/app_review_manager.dart';
@@ -39,5 +40,7 @@ void main() async {
 
   final reviewManager = AppReviewManager();
   await reviewManager.checkAndRequestReview();
+  MobileAds.instance.initialize();
+
   runApp(const MyApp());
 }

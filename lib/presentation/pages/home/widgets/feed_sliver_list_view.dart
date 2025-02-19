@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:haiku/data/data_sources/remote/firebase/clap/clap_service.dart';
 import 'package:haiku/data/data_sources/remote/firebase/notifications/notifications_service.dart';
 import 'package:haiku/data/data_sources/remote/firebase/post/delete_post_service.dart';
@@ -22,6 +23,8 @@ import 'package:haiku/utilities/helpers/toast.dart';
 import 'package:hive/hive.dart';
 import 'package:nil/nil.dart';
 
+import '../../../../utilities/helpers/BannerAdWidget.dart';
+
 class FeedSliverListView extends StatefulWidget {
   const FeedSliverListView({
     super.key,
@@ -30,7 +33,7 @@ class FeedSliverListView extends StatefulWidget {
     this.onRefresh,
   });
 
-  final List<PostModel> posts;
+  final List<PostModel?> posts;
   final ScrollController? scrollController;
   final Future<void> Function()? onRefresh;
 
@@ -50,93 +53,97 @@ class _FeedSliverListViewState extends State<FeedSliverListView> {
         final isLoading = index == widget.posts.length;
         if (isSuccess) {
           final post = widget.posts[index];
-          return PostWidget(
-            profileImage: post.profilePicPath,
-            storyText: post.postText,
-            time: post.timeStamp.customTimeAgo,
-            talksCount: post.talkCount ?? 0,
-            likeCount: post.clapCount,
-            postId: post.postId,
-            posterId: post.userId,
-            onTapTalks: () {
-              AuthUtils().handleAuthenticatedAction(context, () {
-                Go.to(
-                    context,
-                    Pager.talks(
-                      postId: post.postId,
-                      posterId: post.userId,
-                    ));
-              });
-            },
-            onTapShare: () {
-              AuthUtils().handleAuthenticatedAction(context, () {
-                print('Authenticated');
-              });
-            },
-            onTapMore: () {
-              AuthUtils().handleAuthenticatedAction(context, () {
-                final optionsProvider = BottomOptionsProvider.instance;
-                final options = (post.userId == AuthUtils().currentUserId)
-                    ? optionsProvider.getOptionsForMyPosts()
-                    : optionsProvider.getOptionsForOtherPosts();
-    
-                BottomDialog.showOptionsDialog(
-                  context: context,
-                  options: options,
-                  onOptionSelected: (selectedOption) async {
-                    if (selectedOption.key == AppKeys.deleteStory) {
-                      bool result = await DeleteStoryService()
-                          .deleteStory(post.postId);
-                      String toastMessage = result
-                          ? AppTexts.storyDeleted
-                          : AppTexts.anErrorOccurred;
-    
-                      if (mounted) Toast.show(toastMessage, context);
-    
-                      if (result) {
-                        setState(() {
-                          widget.posts.remove(post);
-                        });
+          if (post == null) {
+            return const BannerAdWidget();
+          } else {
+            return PostWidget(
+              profileImage: post.profilePicPath,
+              storyText: post.postText,
+              time: post.timeStamp.customTimeAgo,
+              talksCount: post.talkCount ?? 0,
+              likeCount: post.clapCount,
+              postId: post.postId,
+              posterId: post.userId,
+              onTapTalks: () {
+                AuthUtils().handleAuthenticatedAction(context, () {
+                  Go.to(
+                      context,
+                      Pager.talks(
+                        postId: post.postId,
+                        posterId: post.userId,
+                      ));
+                });
+              },
+              onTapShare: () {
+                AuthUtils().handleAuthenticatedAction(context, () {
+                  print('Authenticated');
+                });
+              },
+              onTapMore: () {
+                AuthUtils().handleAuthenticatedAction(context, () {
+                  final optionsProvider = BottomOptionsProvider.instance;
+                  final options = (post.userId == AuthUtils().currentUserId)
+                      ? optionsProvider.getOptionsForMyPosts()
+                      : optionsProvider.getOptionsForOtherPosts();
+
+                  BottomDialog.showOptionsDialog(
+                    context: context,
+                    options: options,
+                    onOptionSelected: (selectedOption) async {
+                      if (selectedOption.key == AppKeys.deleteStory) {
+                        bool result =
+                            await DeleteStoryService().deleteStory(post.postId);
+                        String toastMessage = result
+                            ? AppTexts.storyDeleted
+                            : AppTexts.anErrorOccurred;
+
+                        if (mounted) Toast.show(toastMessage, context);
+
+                        if (result) {
+                          setState(() {
+                            widget.posts.remove(post);
+                          });
+                        }
                       }
-                    }
-                  },
-                );
-              });
-            },
-            onTapLike: () {
-              AuthUtils().handleAuthenticatedAction(context, () async {
-                ClapService.addClap(
-                  post.postId,
-                  UserInfoService.getInfo(AppKeys.username) ?? '',
-                  post.userId,
-                );
-                 
-                NotificationsService.addNotification(
-                  fromId: AuthUtils().currentUserId, 
-                  toId: post.userId,
-                  notificationText: AppTexts.likedYourHaiku,
-                  fromUsername: Hive.box(AppKeys.userDataBox).get(AppKeys.username),
-                  type: NotificationType.postClapped.name,
-                  clapperId: AuthUtils().currentUserId,
-                  clappedPostId: post.postId,
-                  clappedPostText: post.postText
-                );
-              });
-            },
-            onTapProfileImage: () {
-              AuthUtils().handleAuthenticatedAction(context, () {
-                Alerts.showProfilePhoto(context, post.userId);
-              });
-            },
-            onTapUnLike: () {
-              AuthUtils().handleAuthenticatedAction(context, () {
-                ClapService.removeClap(
-                  post.postId,
-                  post.userId,
-                );
-              });
-            },
-          );
+                    },
+                  );
+                });
+              },
+              onTapLike: () {
+                AuthUtils().handleAuthenticatedAction(context, () async {
+                  ClapService.addClap(
+                    post.postId,
+                    UserInfoService.getInfo(AppKeys.username) ?? '',
+                    post.userId,
+                  );
+
+                  NotificationsService.addNotification(
+                      fromId: AuthUtils().currentUserId,
+                      toId: post.userId,
+                      notificationText: AppTexts.likedYourHaiku,
+                      fromUsername:
+                          Hive.box(AppKeys.userDataBox).get(AppKeys.username),
+                      type: NotificationType.postClapped.name,
+                      clapperId: AuthUtils().currentUserId,
+                      clappedPostId: post.postId,
+                      clappedPostText: post.postText);
+                });
+              },
+              onTapProfileImage: () {
+                AuthUtils().handleAuthenticatedAction(context, () {
+                  Alerts.showProfilePhoto(context, post.userId);
+                });
+              },
+              onTapUnLike: () {
+                AuthUtils().handleAuthenticatedAction(context, () {
+                  ClapService.removeClap(
+                    post.postId,
+                    post.userId,
+                  );
+                });
+              },
+            );
+          }
         } else if (isLoading) {
           return const GlobalLoading();
         }

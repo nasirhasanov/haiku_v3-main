@@ -14,7 +14,7 @@ class FeedBuilder extends StatefulWidget {
   });
 
   final ScrollController? scrollController;
-  final Stream<List<PostModel>>? stream;
+  final Stream<List<PostModel?>>? stream;
   final Future<void> Function()? onRefresh;
   final bool? isSliver;
 
@@ -30,7 +30,7 @@ class _FeedBuilderState extends State<FeedBuilder>
 
     final bool isSliver = widget.isSliver ?? true;
 
-    return StreamBuilder<List<PostModel>>(
+    return StreamBuilder<List<PostModel?>>(
       stream: widget.stream,
       builder: (context, snapshot) {
         final posts = snapshot.data ?? [];
