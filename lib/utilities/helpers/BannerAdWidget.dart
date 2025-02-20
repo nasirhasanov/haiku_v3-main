@@ -20,7 +20,7 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
 
     // Create and load the BannerAd
     _bannerAd = BannerAd(
-      adUnitId: 'ca-app-pub-3940256099942544/9214589741',
+      adUnitId: 'ca-app-pub-7464434031700151/5741038573',
       size: AdSize.banner,
       request: const AdRequest(),
       listener: BannerAdListener(

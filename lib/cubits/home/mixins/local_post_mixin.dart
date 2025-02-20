@@ -12,13 +12,13 @@ mixin LocalPostMixin {
 
   late final ScrollController localPostScrollController = ScrollController();
 
-  final List<PostModel> _localPosts = [];
+  final List<PostModel?> _localPosts = [];
   DocumentSnapshot? _lastDocument;
   bool _isRefresh = false;
 
-  late final _localPostSubject = BehaviorSubject<List<PostModel>>();
+  late final _localPostSubject = BehaviorSubject<List<PostModel?>>();
 
-  ValueStream<List<PostModel>> get localPostStream => _localPostSubject.stream;
+  ValueStream<List<PostModel?>> get localPostStream => _localPostSubject.stream;
 
   void listenToLocalPostScroll() =>
       localPostScrollController.addListener(_loadMorePosts);
@@ -34,6 +34,7 @@ mixin LocalPostMixin {
       final result = await _contract.getLocalPosts(lastDocument: _lastDocument);
       if (isRefresh) await _refreshPostList();
       _localPosts.addAll(result.$1!);
+      _localPosts.add(null);
       _lastDocument = result.$2;
       _localPostSubject.add(_localPosts);
     } catch (_) {

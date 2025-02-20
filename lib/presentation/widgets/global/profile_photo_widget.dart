@@ -17,7 +17,7 @@ class ProfilePhotoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return CircleAvatar(
       radius: imageRadius,
-      backgroundImage: imageUrl != null
+      backgroundImage: (imageUrl != null && imageUrl!.isNotEmpty)
           ? CachedNetworkImageProvider(imageUrl!)
           : const AssetImage(AppAssets.profileAvatar) as ImageProvider,
     );

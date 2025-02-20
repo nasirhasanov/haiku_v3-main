@@ -12,13 +12,13 @@ mixin MixPostMixin {
 
   late final ScrollController mixPostScrollController = ScrollController();
 
-  final List<PostModel> _mixPosts = [];
+  final List<PostModel?> _mixPosts = [];
   DocumentSnapshot? _lastDocument;
   bool _isRefresh = false;
 
-  late final _mixPostSubject = BehaviorSubject<List<PostModel>>();
+  late final _mixPostSubject = BehaviorSubject<List<PostModel?>>();
 
-  ValueStream<List<PostModel>> get mixPostStream => _mixPostSubject.stream;
+  ValueStream<List<PostModel?>> get mixPostStream => _mixPostSubject.stream;
 
   void listenToMixPostScroll() =>
       mixPostScrollController.addListener(_loadMorePosts);
@@ -34,6 +34,7 @@ mixin MixPostMixin {
       final result = await _contract.getMixPosts(lastDocument: _lastDocument);
       if (isRefresh) await _refreshPostList();
       _mixPosts.addAll(result.$1!);
+      _mixPosts.add(null);
       _lastDocument = result.$2;
       _mixPostSubject.add(_mixPosts);
     } catch (_) {
