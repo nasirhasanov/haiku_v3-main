@@ -13,6 +13,8 @@ class FirebaseKeys {
   static const countryCode = 'country_code';
   static const userId = 'user_id';
   static const postId = 'post_id';
+  static const following = 'following';
+  static const followers = 'followers';
 
   // Post document fields
   static const postText = 'post_text';

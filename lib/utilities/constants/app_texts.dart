@@ -91,7 +91,10 @@ class AppTexts {
   static const String searchUsername = 'Search username';
   static const String noUsersFound = 'No users found.';
   static const String follow = 'Follow';
+  static const String unfollow = 'Unfollow';
   static const String following = 'Following';
+  static const String topPosts = 'Top Posts';
+  static const String followed = 'Followed';
 
 
   static const String urlTermsOfService =

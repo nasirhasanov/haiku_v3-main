@@ -6,72 +6,77 @@ import 'package:haiku/utilities/helpers/firebase_singletons.dart';
 class FollowService {
   late final _usersCollection = FirebaseSingletons.usersCollection;
 
-  Future<bool> followUser(String targetUserId) async {
-    final currentUserId = AuthUtils().currentUserId;
-    if (currentUserId == null) return false;
-
+  Future<void> followUser(String userId) async {
     try {
+      final currentUserId = AuthUtils().currentUserId;
+      if (currentUserId == null) return;
+
       // Add to current user's following list
       await _usersCollection.doc(currentUserId).update({
-        'following': FieldValue.arrayUnion([targetUserId])
+        FirebaseKeys.following: FieldValue.arrayUnion([userId])
       });
 
       // Add to target user's followers list
-      await _usersCollection.doc(targetUserId).update({
-        'followers': FieldValue.arrayUnion([currentUserId])
+      await _usersCollection.doc(userId).update({
+        FirebaseKeys.followers: FieldValue.arrayUnion([currentUserId])
       });
-
-      return true;
     } catch (e) {
       print('Error following user: $e');
-      return false;
+      throw Exception(e);
     }
   }
 
-  Future<bool> unfollowUser(String targetUserId) async {
-    final currentUserId = AuthUtils().currentUserId;
-    if (currentUserId == null) return false;
-
+  Future<void> unfollowUser(String userId) async {
     try {
+      final currentUserId = AuthUtils().currentUserId;
+      if (currentUserId == null) return;
+
       // Remove from current user's following list
       await _usersCollection.doc(currentUserId).update({
-        'following': FieldValue.arrayRemove([targetUserId])
+        FirebaseKeys.following: FieldValue.arrayRemove([userId])
       });
 
       // Remove from target user's followers list
-      await _usersCollection.doc(targetUserId).update({
-        'followers': FieldValue.arrayRemove([currentUserId])
+      await _usersCollection.doc(userId).update({
+        FirebaseKeys.followers: FieldValue.arrayRemove([currentUserId])
       });
-
-      return true;
     } catch (e) {
       print('Error unfollowing user: $e');
-      return false;
+      throw Exception(e);
     }
   }
 
-  Future<bool> isFollowing(String targetUserId) async {
+  Stream<bool> isFollowing(String userId) {
     final currentUserId = AuthUtils().currentUserId;
-    if (currentUserId == null) return false;
+    if (currentUserId == null) return Stream.value(false);
 
-    try {
-      final userDoc = await _usersCollection.doc(currentUserId).get();
-      if (!userDoc.exists) return false;
-
-      final data = userDoc.data() as Map<String, dynamic>;
-      final following = List<String>.from(data['following'] ?? []);
-      return following.contains(targetUserId);
-    } catch (e) {
-      print('Error checking follow status: $e');
-      return false;
-    }
+    return _usersCollection.doc(currentUserId).snapshots().map((doc) {
+      final data = doc.data() as Map<String, dynamic>?;
+      if (data == null) return false;
+      final following = List<String>.from(data[FirebaseKeys.following] ?? []);
+      return following.contains(userId);
+    });
   }
 
-  Stream<DocumentSnapshot> getFollowStatus(String targetUserId) {
+  Stream<List<String>> getFollowingStream() {
     final currentUserId = AuthUtils().currentUserId;
-    if (currentUserId == null) {
-      throw Exception('User not authenticated');
-    }
-    return _usersCollection.doc(currentUserId).snapshots();
+    if (currentUserId == null) return Stream.value([]);
+
+    return _usersCollection.doc(currentUserId).snapshots().map((doc) {
+      final data = doc.data() as Map<String, dynamic>?;
+      if (data == null) return [];
+      return List<String>.from(data[FirebaseKeys.following] ?? []);
+    });
+  }
+
+  Stream<List<String>> getFollowersStream() {
+    final currentUserId = AuthUtils().currentUserId;
+    if (currentUserId == null) return Stream.value([]);
+
+    return _usersCollection.doc(currentUserId).snapshots().map((doc) {
+      final data = doc.data() as Map<String, dynamic>?;
+      if (data == null) return [];
+      return List<String>.from(data[FirebaseKeys.followers] ?? []);
+    });
   }
 } 

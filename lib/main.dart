@@ -39,7 +39,7 @@ void main() async {
 
     // Initialize notifications
     final notificationHelper = NotificationHelper();
-    await notificationHelper.initialize();
+    // await notificationHelper.initialize();
 
     final reviewManager = AppReviewManager();
     await reviewManager.checkAndRequestReview();

@@ -15,6 +15,7 @@ import 'package:haiku/data/data_sources/remote/firebase/post/delete_post_service
 import 'package:haiku/data/data_sources/remote/firebase/talks/talks_service.dart';
 import 'package:haiku/data/data_sources/remote/firebase/user/update_user_data_service.dart';
 import 'package:haiku/data/data_sources/remote/firebase/user/user_info_service.dart';
+import 'package:haiku/data/data_sources/remote/firebase/user/follow_service.dart';
 
 import 'data/contracts/auth_contract.dart';
 import 'data/contracts/post_contract.dart';
@@ -51,6 +52,7 @@ Future<void> setupLocator() async {
   locator.registerLazySingleton(() => BestUsersService());
   locator.registerLazySingleton(() => NotificationsService());
   locator.registerLazySingleton((() => FollowingPostsService()));
+  locator.registerLazySingleton<FollowService>(() => FollowService());
 
   locator.registerLazySingleton<PostContract>(() => PostRepository(
         locator<NewPostService>(),
