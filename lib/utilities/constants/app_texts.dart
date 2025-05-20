@@ -90,6 +90,8 @@ class AppTexts {
   static const String cancel = 'Cancel';
   static const String searchUsername = 'Search username';
   static const String noUsersFound = 'No users found.';
+  static const String follow = 'Follow';
+  static const String following = 'Following';
 
 
   static const String urlTermsOfService =

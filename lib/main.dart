@@ -20,27 +20,35 @@ import 'utilities/helpers/app_bloc_observer.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  await setupLocator();
-  Bloc.observer = AppBlocObserver();
+  
+  try {
+    await Firebase.initializeApp();
+    await setupLocator();
+    Bloc.observer = AppBlocObserver();
 
-  final appDocumentDir = await getApplicationDocumentsDirectory();
-  Hive.init(appDocumentDir.path);
-  await Hive.openBox(AppKeys.locationBox);
-  await Hive.openBox(AppKeys.userDataBox);
+    final appDocumentDir = await getApplicationDocumentsDirectory();
+    Hive.init(appDocumentDir.path);
+    await Hive.openBox(AppKeys.locationBox);
+    await Hive.openBox(AppKeys.userDataBox);
 
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
-  AppThemes.setSystemUIOverlayStyle();
-  // Initialize notifications
-  final notificationHelper = NotificationHelper();
-  await notificationHelper.initialize();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    AppThemes.setSystemUIOverlayStyle();
 
-  final reviewManager = AppReviewManager();
-  await reviewManager.checkAndRequestReview();
-  MobileAds.instance.initialize();
+    // Initialize notifications
+    final notificationHelper = NotificationHelper();
+    await notificationHelper.initialize();
 
-  runApp(const MyApp());
+    final reviewManager = AppReviewManager();
+    await reviewManager.checkAndRequestReview();
+    MobileAds.instance.initialize();
+
+    runApp(const MyApp());
+  } catch (e) {
+    print('Error initializing app: $e');
+    // You might want to show an error screen or handle the error appropriately
+    runApp(const MyApp());
+  }
 }

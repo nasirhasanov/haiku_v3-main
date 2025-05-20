@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
+import 'package:haiku/utilities/helpers/auth_utils.dart';
 
 class NotificationHelper {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
@@ -9,10 +9,14 @@ class NotificationHelper {
 
   /// Initializes Firebase notifications and local notifications for both platforms
   Future<void> initialize() async {
-    await _initializeFirebaseApp();
-    await _initializeNotificationSettings();
-    await _initializeLocalNotifications();
-    _setupMessageListeners();
+    try {
+      await _initializeFirebaseApp();
+      await _initializeNotificationSettings();
+      await _initializeLocalNotifications();
+      _setupMessageListeners();
+    } catch (e) {
+      print('Error initializing notifications: $e');
+    }
   }
 
   /// Initializes Firebase App and sets up background message handler
@@ -23,7 +27,7 @@ class NotificationHelper {
   /// Initializes local notifications for both Android and iOS
   Future<void> _initializeLocalNotifications() async {
     const AndroidInitializationSettings androidSettings =
-    AndroidInitializationSettings('@drawable/app_icon');
+        AndroidInitializationSettings('@mipmap/ic_launcher');
 
     const DarwinInitializationSettings iosSettings = DarwinInitializationSettings(
       requestAlertPermission: true,
@@ -46,45 +50,42 @@ class NotificationHelper {
   }
 
   /// Saves the FCM token to Firestore for the current user
-  static Future<void> _saveFcmToken(String? token) async {
+  Future<void> _saveFcmToken(String? token) async {
     if (token == null) return;
 
-    // Replace this with your logic to get the current user's ID
-    final String? userId = "CURRENT_USER_ID"; // Replace with actual user ID
-    if (userId != null) {
-      try {
-        // Save the token to Firestore (update with your Firestore structure)
-        await FirebaseFirestore.instance.collection('users').doc(userId).update({
-          'fcmToken': token,
-        });
-      } catch (e) {
-        print('Failed to save FCM token: $e');
-      }
+    final userId = AuthUtils().currentUserId;
+    if (userId == null) return;
+
+    try {
+      await FirebaseFirestore.instance.collection('users').doc(userId).update({
+        'deviceToken': token,
+      });
+    } catch (e) {
+      print('Failed to save FCM token: $e');
     }
   }
 
   /// Requests notification permissions and saves the initial FCM token
   Future<void> _initializeNotificationSettings() async {
-    final token = await _firebaseMessaging.getToken();
-    await _saveFcmToken(token);
+    try {
+      // Request permission first
+      await _firebaseMessaging.requestPermission(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
 
-    _firebaseMessaging.onTokenRefresh.listen((newToken) async {
-      await _saveFcmToken(newToken);
-    });
+      // Get the token after permission is granted
+      final token = await _firebaseMessaging.getToken();
+      await _saveFcmToken(token);
 
-    await _firebaseMessaging.requestPermission(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
-
-    // Request permissions for iOS if necessary
-    await _localNotificationsPlugin.resolvePlatformSpecificImplementation<
-        IOSFlutterLocalNotificationsPlugin>()?.requestPermissions(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
+      // Listen for token refresh
+      _firebaseMessaging.onTokenRefresh.listen((newToken) async {
+        await _saveFcmToken(newToken);
+      });
+    } catch (e) {
+      print('Error initializing notification settings: $e');
+    }
   }
 
   /// Background message handler
@@ -116,7 +117,7 @@ class NotificationHelper {
       importance: Importance.high,
       priority: Priority.high,
       ticker: 'ticker',
-      icon: '@drawable/app_icon',
+      icon: '@mipmap/ic_launcher',
     );
 
     const DarwinNotificationDetails iosDetails = DarwinNotificationDetails(

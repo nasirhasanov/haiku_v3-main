@@ -9,6 +9,8 @@ class UserInfoModel {
   String? bio;
   String? profilePicPath;
   bool? hasNotifications;
+  List<String>? following;
+  List<String>? followers;
 
   UserInfoModel({
     this.userName,
@@ -19,6 +21,8 @@ class UserInfoModel {
     this.bio,
     this.profilePicPath,
     this.hasNotifications,
+    this.following,
+    this.followers,
   });
 
   factory UserInfoModel.fromDocumentSnapshot(
@@ -34,7 +38,9 @@ class UserInfoModel {
       deviceToken: data['deviceToken'],
       bio: data['bio'],
       profilePicPath: data['profile_pic_path'],
-      hasNotifications: data['has_notifications']
+      hasNotifications: data['has_notifications'],
+      following: List<String>.from(data['following'] ?? []),
+      followers: List<String>.from(data['followers'] ?? []),
     );
   }
 }
