@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
-import 'package:haiku/data/data_sources/remote/firebase/post/following_posts_service.dart';
+import 'package:haiku/data/data_sources/remote/firebase/feed/following_post_service.dart';
 import 'package:haiku/data/repository/location_repository.dart';
 import 'package:haiku/data/repository/notifications_repository.dart';
 import 'package:haiku/data/repository/talks_repository.dart';
@@ -51,7 +51,7 @@ Future<void> setupLocator() async {
   locator.registerLazySingleton(() => UpdateUserDataService());
   locator.registerLazySingleton(() => BestUsersService());
   locator.registerLazySingleton(() => NotificationsService());
-  locator.registerLazySingleton((() => FollowingPostsService()));
+  locator.registerLazySingleton(() => FollowingPostService());
   locator.registerLazySingleton<FollowService>(() => FollowService());
 
   locator.registerLazySingleton<PostContract>(() => PostRepository(
@@ -60,6 +60,7 @@ Future<void> setupLocator() async {
         locator<LocalPostService>(),
         locator<MyPostService>(),
         locator<AuthorPostService>(),
+        locator<FollowingPostService>(),
       ));
 
   locator.registerLazySingleton<UserRepositoryImpl>(() =>

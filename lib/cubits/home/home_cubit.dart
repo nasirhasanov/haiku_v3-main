@@ -5,15 +5,17 @@ import 'mixins/home_mixin.dart';
 import 'mixins/local_post_mixin.dart';
 import 'mixins/mix_post_mixin.dart';
 import 'mixins/new_post_mixin.dart';
+import 'mixins/following_post_mixin.dart';
 
 part 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState>
-    with HomeMixin, LocalPostMixin, MixPostMixin, NewPostMixin {
+    with HomeMixin, LocalPostMixin, MixPostMixin, NewPostMixin, FollowingPostMixin {
   HomeCubit() : super(HomeInitial()) {
     listenToNewPostScroll();
     listenToMixPostScroll();
     listenToLocalPostScroll();
+    listenToFollowingPostScroll();
   }
 
   Future<void> getAllPosts() async {
@@ -23,6 +25,7 @@ class HomeCubit extends Cubit<HomeState>
         getNewPosts(),
         getMixPosts(),
         getLocalPosts(),
+        getFollowingPosts(),
       ]);
       emit(HomeSuccess());
     } catch (_) {
@@ -36,6 +39,7 @@ class HomeCubit extends Cubit<HomeState>
     newPostListenerClose();
     mixPostListenerClose();
     localPostListenerClose();
+    followingPostListenerClose();
     return super.close();
   }
 }

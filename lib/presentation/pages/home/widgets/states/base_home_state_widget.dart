@@ -10,7 +10,7 @@ import '../../views/feed_view.dart';
 abstract class BaseHomeStateWidget<HomePage extends StatefulWidget>
     extends State<HomePage> with SingleTickerProviderStateMixin {
   late final TabController tabController;
-  final int tabLength = 3;
+  final int tabLength = 4;
   final ValueNotifier<Map<NavBarIconEnum, Widget>> pages = ValueNotifier({});
 
   @override

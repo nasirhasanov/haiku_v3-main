@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:haiku/cubits/following/following_posts_cubit.dart';
-import 'package:haiku/cubits/following/following_posts_state.dart';
 import 'package:haiku/presentation/pages/home/widgets/feed_list_view.dart';
 import 'package:haiku/presentation/widgets/global/global_loading.dart';
 import 'package:haiku/utilities/constants/app_texts.dart';
