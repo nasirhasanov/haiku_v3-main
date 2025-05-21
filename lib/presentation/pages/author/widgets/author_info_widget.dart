@@ -38,67 +38,85 @@ class AuthorInfoWidget extends StatelessWidget {
           color: Colors.transparent,
           child: Padding(
             padding: AppPaddings.t24,
-            child: Column(
+            child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                GestureDetector(
-                  onTap: () {
-                    if (profilePicUrl != null) {
-                      Go.to(context, Pager.showProfilePic(profilePicUrl: profilePicUrl));
-                    }
-                  },
-                  child: ProfilePhotoWidget(
-                    imageRadius: 36,
-                    imageUrl: profilePicUrl,
-                  ),
-                ),
-                Text('@$username', style: AppTextStyles.normalBlack24),
-                AppSizedBoxes.h4,
-                Text('$bio', style: AppTextStyles.normalGrey20),
-                AppSizedBoxes.h4,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                AppSizedBoxes.w16,
+                Column(
                   children: [
-                    Text('$score', style: AppTextStyles.normalGrey20),
-                    AppSizedBoxes.w8,
-                    const PostIconWidget(
-                      icon: AppAssets.clapFilled,
-                      color: AppColors.gold,
+                    GestureDetector(
+                      onTap: () {
+                        if (profilePicUrl != null) {
+                          Go.to(context, Pager.showProfilePic(profilePicUrl: profilePicUrl));
+                        }
+                      },
+                      child: ProfilePhotoWidget(
+                        imageRadius: 48,
+                        imageUrl: profilePicUrl,
+                      ),
                     ),
                   ],
                 ),
-                if (currentUserId != null && currentUserId != cubit.authorId)
-                  StreamBuilder<bool>(
-                    stream: locator<FollowService>().isFollowing(cubit.authorId),
-                    builder: (context, snapshot) {
-                      final isFollowing = snapshot.data ?? false;
-                      return ElevatedButton(
-                        onPressed: () {
-                          if (isFollowing) {
-                            locator<FollowService>().unfollowUser(cubit.authorId);
-                          } else {
-                            locator<FollowService>().followUser(cubit.authorId);
-                          }
+                AppSizedBoxes.w16,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('@$username', style: AppTextStyles.normalBlack24),
+                    AppSizedBoxes.h4,
+                    Flexible(
+                      child: Text(
+                        '$bio',
+                        style: AppTextStyles.normalGrey20,
+                        softWrap: true,
+                        overflow: TextOverflow.visible,
+                      ),
+                    ),
+                    AppSizedBoxes.h4,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text('$score', style: AppTextStyles.normalGrey20),
+                        AppSizedBoxes.w8,
+                        const PostIconWidget(
+                          icon: AppAssets.clapFilled,
+                          color: AppColors.gold,
+                        ),
+                      ],
+                    ),
+                    if (currentUserId != null && currentUserId != cubit.authorId)
+                      StreamBuilder<bool>(
+                        stream: locator<FollowService>().isFollowing(cubit.authorId),
+                        builder: (context, snapshot) {
+                          final isFollowing = snapshot.data ?? false;
+                          return ElevatedButton(
+                            onPressed: () {
+                              if (isFollowing) {
+                                locator<FollowService>().unfollowUser(cubit.authorId);
+                              } else {
+                                locator<FollowService>().followUser(cubit.authorId);
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: isFollowing ? AppColors.grey : AppColors.purple,
+                              foregroundColor: AppColors.white,
+                              padding: AppPaddings.h24 + AppPaddings.v8,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                            ),
+                            child: Text(
+                              isFollowing ? AppTexts.unfollow : AppTexts.follow,
+                              style: const TextStyle(
+                                color: AppColors.white,
+                                fontSize: 16,
+                              ),
+                            ),
+                          );
                         },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: isFollowing ? AppColors.grey : AppColors.purple,
-                          foregroundColor: AppColors.white,
-                          padding: AppPaddings.h24 + AppPaddings.v8,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
-                        child: Text(
-                          isFollowing ? AppTexts.unfollow : AppTexts.follow,
-                          style: const TextStyle(
-                            color: AppColors.white,
-                            fontSize: 16,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
+                      ),
+                  ],
+                ),
               ],
             ),
           ),

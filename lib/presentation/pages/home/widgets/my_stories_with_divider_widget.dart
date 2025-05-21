@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:haiku/utilities/constants/app_texts.dart';
 
 import '../../../../utilities/constants/app_colors.dart';
+import '../../../../utilities/constants/app_paddings.dart';
 import '../../../../utilities/constants/app_sized_boxes.dart';
 import '../../../../utilities/constants/app_text_styles.dart';
 import '../../../widgets/global/global_divider.dart';
@@ -16,25 +17,26 @@ class MyStoriesWithDividerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Center(
-          child: Text(
+    return Padding(
+      padding: AppPaddings.l16,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
             title, // Use the passed title here
             style: AppTextStyles.normalGrey14.copyWith(color: AppColors.black),
             textAlign: TextAlign.center, // Ensure text is centered
           ),
-        ),
-        AppSizedBoxes.h10,
-        const GlobalDivider.horizontal(
-          height: 1.6,
-          width: 96,
-          top: 0,
-          bottom: 0,
-          color: AppColors.black,
-        ),
-      ],
+          AppSizedBoxes.h10,
+          const GlobalDivider.horizontal(
+            height: 2,
+            width: 96,
+            top: 0,
+            bottom: 0,
+            color: AppColors.grey,
+          ),
+        ],
+      ),
     );
   }
 }

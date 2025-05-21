@@ -5,6 +5,7 @@ import '../../../../utilities/constants/app_paddings.dart';
 import '../../../../utilities/constants/app_sizes.dart';
 import '../../../../utilities/constants/app_text_styles.dart';
 import '../../../../utilities/constants/app_texts.dart';
+import '../../../../utilities/helpers/auth_utils.dart';
 
 class TabBarWidget extends StatelessWidget implements PreferredSizeWidget {
   final TabController _tabController;
@@ -30,10 +31,10 @@ class TabBarWidget extends StatelessWidget implements PreferredSizeWidget {
           labelPadding: AppPaddings.zero,
           indicatorPadding: AppPaddings.h2,
           unselectedLabelColor: AppColors.grey,
-          tabs: const [
-            Tab(text: AppTexts.neww),
-            Tab(text: AppTexts.mix),
-            Tab(text: AppTexts.followed),
+          tabs: [
+            const Tab(text: AppTexts.neww),
+            const Tab(text: AppTexts.mix),
+            if (AuthUtils().isLoggedIn()) const Tab(text: AppTexts.followed),
           ],
         ),
       ),

@@ -34,9 +34,7 @@ class Pager {
             create: (context) {
               final cubit = HomeCubit();
               AuthUtils().userStream.listen((user) {
-                if (user != null) {
                   cubit.getAllPosts();
-                }
               });
               return cubit;
             },
