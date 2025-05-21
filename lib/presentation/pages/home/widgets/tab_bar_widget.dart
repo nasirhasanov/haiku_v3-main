@@ -33,7 +33,6 @@ class TabBarWidget extends StatelessWidget implements PreferredSizeWidget {
           tabs: const [
             Tab(text: AppTexts.neww),
             Tab(text: AppTexts.mix),
-            Tab(text: AppTexts.top),
             Tab(text: AppTexts.followed),
           ],
         ),

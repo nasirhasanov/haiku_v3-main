@@ -23,6 +23,7 @@ import '../../presentation/pages/best/search/search_users_page.dart';
 import '../../presentation/pages/home/home_page.dart';
 import '../../presentation/pages/login/login_page.dart';
 import '../../presentation/pages/register/register_page.dart';
+import '../../utilities/helpers/auth_utils.dart';
 
 class Pager {
   Pager._();
@@ -30,7 +31,15 @@ class Pager {
   static Widget get home => MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) => HomeCubit()..getAllPosts(),
+            create: (context) {
+              final cubit = HomeCubit();
+              AuthUtils().userStream.listen((user) {
+                if (user != null) {
+                  cubit.getAllPosts();
+                }
+              });
+              return cubit;
+            },
           ),
           BlocProvider(
             create: (context) => ProfileCubit()..loadProfile(),

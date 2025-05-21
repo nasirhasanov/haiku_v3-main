@@ -6,6 +6,7 @@ import 'package:haiku/utilities/enums/nav_bar_icon_enum.dart';
 import 'package:haiku/utilities/helpers/auth_utils.dart';
 
 import '../../views/feed_view.dart';
+import '../../views/following_view.dart';
 
 abstract class BaseHomeStateWidget<HomePage extends StatefulWidget>
     extends State<HomePage> with SingleTickerProviderStateMixin {
@@ -30,6 +31,9 @@ abstract class BaseHomeStateWidget<HomePage extends StatefulWidget>
             : CreateAccountPromptView(tabController: tabController),
         NavBarIconEnum.profile: user != null
             ? ProfileView(tabController: tabController)
+            : CreateAccountPromptView(tabController: tabController),
+        NavBarIconEnum.followed: user != null
+            ? FollowingView(tabController: tabController)
             : CreateAccountPromptView(tabController: tabController),
       };
     });

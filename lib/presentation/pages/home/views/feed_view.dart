@@ -39,12 +39,6 @@ class FeedView extends StatelessWidget {
                   isSliver: false,
                 ),
                 FeedBuilder(
-                  scrollController: cubit.localPostScrollController,
-                  stream: cubit.localPostStream,
-                  onRefresh: () => cubit.getLocalPosts(isRefresh: true),
-                  isSliver: false,
-                ),
-                FeedBuilder(
                   scrollController: cubit.followingPostScrollController,
                   stream: cubit.followingPostStream,
                   onRefresh: () => cubit.getFollowingPosts(isRefresh: true),

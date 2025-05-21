@@ -22,14 +22,14 @@ class FollowingPostsCubit extends Cubit<FollowingPostsState> {
       _isLoading = true;
       emit(FollowingPostsLoading());
 
-      final posts = await _followingPostsService.getFollowingPosts(
+      final result = await _followingPostsService.getFollowingPosts(
         lastDocument: _lastDocument,
       );
 
+      final posts = result.$1 ?? [];
+      _lastDocument = result.$2;
+
       if (posts.isNotEmpty) {
-        _lastDocument = await _followingPostsService._postsCollection
-            .doc(posts.last.postId)
-            .get();
         _posts.addAll(posts);
       }
 
