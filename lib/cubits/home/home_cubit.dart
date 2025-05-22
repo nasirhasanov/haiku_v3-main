@@ -14,6 +14,7 @@ class HomeCubit extends Cubit<HomeState>
   HomeCubit() : super(HomeInitial()) {
     listenToNewPostScroll();
     listenToMixPostScroll();
+    listenToFollowedUsersScroll();
   }
 
   // Track which tabs have been loaded

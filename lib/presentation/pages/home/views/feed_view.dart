@@ -69,12 +69,13 @@ class _FeedViewState extends State<FeedView> with SingleTickerProviderStateMixin
                   isSliver: false,
                 ),
                 // For the following tab, show users instead of posts
-                StreamBuilder<List<UserInfoModel>?>(
+                StreamBuilder<List<UserInfoModel>>(
                   stream: _cubit.followedUsersStream,
                   builder: (context, snapshot) {
                     return FollowedUsersListView(
                       users: snapshot.data ?? [],
                       onRefresh: () => _cubit.getFollowedUsers(isRefresh: true),
+                      scrollController: _cubit.followedUsersScrollController,
                     );
                   },
                 )

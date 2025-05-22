@@ -10,11 +10,21 @@ class FollowingPostService {
   // Cache following list to avoid frequent fetches
   List<String>? _followingCache;
   
-  Future<List<UserInfoModel>?> getFollowedUsers() async {
+  // Pagination variables
+  int _currentPage = 0;
+  static const int _usersPerPage = 10;
+  
+  Future<List<UserInfoModel>?> getFollowedUsers({bool isRefresh = false}) async {
     try {
       final currentUserId = AuthUtils().currentUserId;
       if (currentUserId == null) {
         return [];
+      }
+      
+      // Reset pagination if refreshing
+      if (isRefresh) {
+        _currentPage = 0;
+        _followingCache = null;
       }
       
       // Get or use cached following list
@@ -36,27 +46,38 @@ class FollowingPostService {
         }
       }
 
-      // Firestore's whereIn only supports up to 10 values at a time
-      final List<UserInfoModel> allUsers = [];
+      // Calculate pagination indexes
+      final startIndex = _currentPage * _usersPerPage;
+      if (startIndex >= following.length) {
+        // No more users to load
+        return [];
+      }
       
-      // Process in batches of 10
-      for (int i = 0; i < following.length; i += 10) {
-        final endIdx = (i + 10 < following.length) ? i + 10 : following.length;
-        final batch = following.sublist(i, endIdx);
-        
-        final querySnapshot = await _usersCollection
-            .where(FirebaseKeys.uid, whereIn: batch)
-            .get();
-        
-        for (final doc in querySnapshot.docs) {
-          allUsers.add(UserInfoModel.fromDocumentSnapshot(doc));
-        }
+      final endIndex = (startIndex + _usersPerPage < following.length) 
+          ? startIndex + _usersPerPage 
+          : following.length;
+      
+      // Get subset of users to load for this page
+      final usersToLoad = following.sublist(startIndex, endIndex);
+      final List<UserInfoModel> pageUsers = [];
+      
+      // Firestore's whereIn only supports up to 10 values at a time
+      // In this case it works well with our pagination size
+      final querySnapshot = await _usersCollection
+          .where(FirebaseKeys.uid, whereIn: usersToLoad)
+          .get();
+      
+      for (final doc in querySnapshot.docs) {
+        pageUsers.add(UserInfoModel.fromDocumentSnapshot(doc));
       }
       
       // Sort users by name for consistent display
-      allUsers.sort((a, b) => (a.userName ?? '').compareTo(b.userName ?? ''));
+      pageUsers.sort((a, b) => (a.userName ?? '').compareTo(b.userName ?? ''));
       
-      return allUsers;
+      // Increment page for next load
+      _currentPage++;
+      
+      return pageUsers;
     } catch (e) {
       print("Error fetching followed users: $e");
       return [];
@@ -65,5 +86,6 @@ class FollowingPostService {
   
   void resetCache() {
     _followingCache = null;
+    _currentPage = 0;
   }
 } 

@@ -16,10 +16,12 @@ class FollowedUsersListView extends StatelessWidget {
     super.key,
     required this.users,
     this.onRefresh,
+    this.scrollController,
   });
 
   final List<UserInfoModel>? users;
   final Future<void> Function()? onRefresh;
+  final ScrollController? scrollController;
 
   @override
   Widget build(BuildContext context) {
@@ -39,10 +41,27 @@ class FollowedUsersListView extends StatelessWidget {
     return RefreshIndicator.adaptive(
       onRefresh: onRefresh ?? () async {},
       child: ListView.separated(
-        itemCount: users!.length,
+        controller: scrollController,
+        itemCount: users!.length + 1, // +1 for the loading indicator
         physics: const AlwaysScrollableScrollPhysics(),
         separatorBuilder: (context, index) => const GlobalDivider.horizontal(left: 70),
         itemBuilder: (context, index) {
+          // Show loading indicator at the bottom
+          if (index == users!.length) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: Center(
+                child: users!.isEmpty 
+                  ? const SizedBox() // Empty list, don't show loader
+                  : const SizedBox(
+                      height: 30, 
+                      width: 30, 
+                      child: CircularProgressIndicator.adaptive(strokeWidth: 2),
+                    ),
+              ),
+            );
+          }
+          
           final user = users![index];
           return _UserListItem(userInfo: user);
         },
