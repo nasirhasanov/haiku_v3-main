@@ -34,7 +34,8 @@ class Pager {
             create: (context) {
               final cubit = HomeCubit();
               AuthUtils().userStream.listen((user) {
-                  cubit.getAllPosts();
+                // Only load the initial feed with new posts
+                cubit.loadInitialFeed();
               });
               return cubit;
             },
