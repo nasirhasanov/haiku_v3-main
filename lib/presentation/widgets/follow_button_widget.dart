@@ -69,7 +69,7 @@ class _FollowButtonState extends State<FollowButton> {
     return ElevatedButton(
       onPressed: _isLoading ? null : _toggleFollow,
       style: ElevatedButton.styleFrom(
-        backgroundColor: _isFollowing ? AppColors.grey : AppColors.primary,
+        backgroundColor: _isFollowing ? AppColors.grey : AppColors.purple,
         foregroundColor: _isFollowing ? AppColors.black : AppColors.white,
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
         shape: RoundedRectangleBorder(
