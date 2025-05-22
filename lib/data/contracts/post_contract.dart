@@ -19,8 +19,5 @@ abstract class PostContract {
     required String authorId,
     DocumentSnapshot? lastDocument,
   });
-  Future<(List<PostModel>?, DocumentSnapshot?)> getFollowingPosts({
-    DocumentSnapshot? lastDocument,
-  });
   Future<PostModel?> getPost(String postId);
 }

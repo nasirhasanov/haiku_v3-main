@@ -5,11 +5,27 @@ import 'package:haiku/utilities/helpers/firebase_singletons.dart';
 
 class FollowService {
   late final _usersCollection = FirebaseSingletons.usersCollection;
+  static const int _maxFollowing = 100; // Maximum number of users one can follow
 
   Future<void> followUser(String userId) async {
     try {
       final currentUserId = AuthUtils().currentUserId;
       if (currentUserId == null) return;
+
+      // Check if user is already following
+      final userDoc = await _usersCollection.doc(currentUserId).get();
+      if (!userDoc.exists) return;
+
+      final data = userDoc.data() as Map<String, dynamic>;
+      final following = List<String>.from(data[FirebaseKeys.following] ?? []);
+
+      // Check if already following
+      if (following.contains(userId)) return;
+
+      // Check if following limit reached
+      if (following.length >= _maxFollowing) {
+        throw Exception('Maximum following limit reached (${_maxFollowing} users)');
+      }
 
       // Add to current user's following list
       await _usersCollection.doc(currentUserId).update({
@@ -78,5 +94,17 @@ class FollowService {
       if (data == null) return [];
       return List<String>.from(data[FirebaseKeys.followers] ?? []);
     });
+  }
+
+  Future<bool> canFollowMore() async {
+    final currentUserId = AuthUtils().currentUserId;
+    if (currentUserId == null) return false;
+
+    final userDoc = await _usersCollection.doc(currentUserId).get();
+    if (!userDoc.exists) return false;
+
+    final data = userDoc.data() as Map<String, dynamic>;
+    final following = List<String>.from(data[FirebaseKeys.following] ?? []);
+    return following.length < _maxFollowing;
   }
 } 

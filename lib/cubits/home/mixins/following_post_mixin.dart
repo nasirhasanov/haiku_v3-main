@@ -1,58 +1,59 @@
 import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../../data/contracts/post_contract.dart';
-import '../../../data/models/post_model.dart';
+import '../../../data/models/user_info_model.dart';
+import '../../../data/data_sources/remote/firebase/feed/following_post_service.dart';
 import '../../../locator.dart';
-import '../../../utilities/extensions/scroll_controller_extensions.dart';
 
 mixin FollowingPostMixin {
-  late final PostContract _contract = locator<PostContract>();
+  final FollowingPostService _followingService = locator<FollowingPostService>();
 
-  late final ScrollController followingPostScrollController = ScrollController();
+  late final BehaviorSubject<List<UserInfoModel>?> _followedUsersSubject = BehaviorSubject<List<UserInfoModel>?>();
 
-  final List<PostModel?> _followingPosts = [];
-  DocumentSnapshot? _lastDocument;
-  bool _isRefresh = false;
+  ValueStream<List<UserInfoModel>?> get followedUsersStream => _followedUsersSubject.stream;
 
-  late final _followingPostSubject = BehaviorSubject<List<PostModel?>>();
+  bool _isLoading = false;
 
-  ValueStream<List<PostModel?>> get followingPostStream => _followingPostSubject.stream;
-
-  void listenToFollowingPostScroll() =>
-      followingPostScrollController.addListener(_loadMorePosts);
-
-  void _loadMorePosts() {
-    if (followingPostScrollController.isLastItem && !_isRefresh) getFollowingPosts();
-  }
-
-  Future<void> getFollowingPosts({bool isRefresh = false}) async {
+  Future<void> getFollowedUsers({bool isRefresh = false}) async {
+    if (_isLoading) return;
+    
     try {
-      _isRefresh = isRefresh;
-      if (isRefresh) await _refreshLastDocument();
-      final result = await _contract.getFollowingPosts(lastDocument: _lastDocument);
-      if (isRefresh) await _refreshPostList();
-      _followingPosts.addAll(result.$1!);
-      _followingPosts.add(null);
-      _lastDocument = result.$2;
-      _followingPostSubject.add(_followingPosts);
-    } catch (_) {
-      _followingPostSubject.addError('Error getting following posts');
+      _isLoading = true;
+      
+      if (isRefresh) {
+        _followingService.resetCache();
+      }
+      
+      final users = await _followingService.getFollowedUsers();
+      
+      if (isRefresh) {
+        // Clear previous data on refresh
+        _followedUsersSubject.add(users);
+      } else {
+        // Add to existing data
+        final currentList = _followedUsersSubject.valueOrNull ?? [];
+        final updatedList = [...currentList];
+        
+        // Only add users not already in the list to avoid duplicates
+        for (final user in users ?? []) {
+          if (!updatedList.any((u) => u.userId == user.userId)) {
+            updatedList.add(user);
+          }
+        }
+        
+        _followedUsersSubject.add(updatedList);
+      }
+    } catch (e) {
+      _followedUsersSubject.addError('Error getting followed users');
     } finally {
-      _isRefresh = false;
+      _isLoading = false;
     }
   }
 
-  Future<void> _refreshLastDocument() async => _lastDocument = null;
-
-  Future<void> _refreshPostList() async => _followingPosts.clear();
-
-  void followingPostListenerClose() {
-    followingPostScrollController.removeListener(_loadMorePosts);
-    followingPostScrollController.dispose();
-    _followingPostSubject.close();
+  void followingUsersClose() {
+    _followedUsersSubject.close();
   }
 } 

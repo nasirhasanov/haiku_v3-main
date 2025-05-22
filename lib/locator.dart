@@ -60,7 +60,6 @@ Future<void> setupLocator() async {
         locator<LocalPostService>(),
         locator<MyPostService>(),
         locator<AuthorPostService>(),
-        locator<FollowingPostService>(),
       ));
 
   locator.registerLazySingleton<UserRepositoryImpl>(() =>

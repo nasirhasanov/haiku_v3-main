@@ -7,7 +7,6 @@ import '../models/post_model.dart';
 import '../data_sources/remote/firebase/feed/local_post_service.dart';
 import '../data_sources/remote/firebase/feed/mix_posts_service.dart';
 import '../data_sources/remote/firebase/feed/new_post_service.dart';
-import '../data_sources/remote/firebase/feed/following_post_service.dart';
 
 class PostRepository implements PostContract {
   PostRepository(
@@ -16,7 +15,6 @@ class PostRepository implements PostContract {
     this._localPostsService,
     this._myPostsService,
     this._authorPostsService,
-    this._followingPostService,
   );
 
   final NewPostService _newPostService;
@@ -24,7 +22,6 @@ class PostRepository implements PostContract {
   final LocalPostService _localPostsService;
   final MyPostService _myPostsService;
   final AuthorPostService _authorPostsService;
-  final FollowingPostService _followingPostService;
 
   @override
   Future<(List<PostModel>?, DocumentSnapshot?)> getNewPosts(
@@ -53,12 +50,6 @@ class PostRepository implements PostContract {
   }) =>
       _authorPostsService.getAuthorPosts(
           authorId: authorId, lastDocument: lastDocument);
-
-  @override
-  Future<(List<PostModel>?, DocumentSnapshot?)> getFollowingPosts({
-    DocumentSnapshot? lastDocument,
-  }) =>
-      _followingPostService.getFollowingPosts(lastDocument: lastDocument);
 
   @override
   Future<PostModel?> getPost(String postId) =>

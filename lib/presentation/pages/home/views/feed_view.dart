@@ -3,8 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nil/nil.dart';
 
 import '../../../../cubits/home/home_cubit.dart';
+import '../../../../data/models/user_info_model.dart';
 import '../../../widgets/global/global_loading.dart';
 import '../widgets/feed_builder.dart';
+import '../widgets/followed_users_list_view.dart';
 import '../widgets/headers/feed_app_bar_widget.dart';
 
 class FeedView extends StatelessWidget {
@@ -38,12 +40,16 @@ class FeedView extends StatelessWidget {
                   onRefresh: () => cubit.getMixPosts(isRefresh: true),
                   isSliver: false,
                 ),
-                FeedBuilder(
-                  scrollController: cubit.followingPostScrollController,
-                  stream: cubit.followingPostStream,
-                  onRefresh: () => cubit.getFollowingPosts(isRefresh: true),
-                  isSliver: false,
-                ),
+                // For the following tab, show users instead of posts
+                StreamBuilder<List<UserInfoModel>?>(
+                  stream: cubit.followedUsersStream,
+                  builder: (context, snapshot) {
+                    return FollowedUsersListView(
+                      users: snapshot.data ?? [],
+                      onRefresh: () => cubit.getFollowedUsers(isRefresh: true),
+                    );
+                  },
+                )
               ],
             );
           }

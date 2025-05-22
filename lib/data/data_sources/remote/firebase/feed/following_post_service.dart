@@ -1,61 +1,69 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:haiku/data/models/post_model.dart';
+import 'package:haiku/data/models/user_info_model.dart';
 import 'package:haiku/utilities/constants/firebase_keys.dart';
 import 'package:haiku/utilities/helpers/auth_utils.dart';
 import 'package:haiku/utilities/helpers/firebase_singletons.dart';
 
 class FollowingPostService {
-  late final _postsCollection = FirebaseSingletons.postsCollection;
   late final _usersCollection = FirebaseSingletons.usersCollection;
-
-  Future<(List<PostModel>?, DocumentSnapshot?)> getFollowingPosts({
-    DocumentSnapshot? lastDocument,
-  }) async {
+  
+  // Cache following list to avoid frequent fetches
+  List<String>? _followingCache;
+  
+  Future<List<UserInfoModel>?> getFollowedUsers() async {
     try {
-      final List<PostModel> postList = [];
       final currentUserId = AuthUtils().currentUserId;
-
       if (currentUserId == null) {
-        return (<PostModel>[], lastDocument);
+        return [];
       }
-
-      final userDoc = await _usersCollection.doc(currentUserId).get();
-      if (!userDoc.exists) {
-        return (<PostModel>[], lastDocument);
-      }
-
-      final data = userDoc.data() as Map<String, dynamic>;
-      final following = List<String>.from(data[FirebaseKeys.following] ?? []);
       
-      if (following.isEmpty) {
-        return (<PostModel>[], lastDocument);
+      // Get or use cached following list
+      List<String> following;
+      if (_followingCache != null) {
+        following = _followingCache!;
+      } else {
+        final userDoc = await _usersCollection.doc(currentUserId).get();
+        if (!userDoc.exists) {
+          return [];
+        }
+        
+        final data = userDoc.data() as Map<String, dynamic>;
+        following = List<String>.from(data[FirebaseKeys.following] ?? []);
+        _followingCache = following;
+        
+        if (following.isEmpty) {
+          return [];
+        }
       }
 
-      Query query = _postsCollection
-          .where(FirebaseKeys.userId, whereIn: following)
-          .orderBy(FirebaseKeys.time, descending: true)
-          .limit(10);
-
-      if (lastDocument != null) {
-        query = query.startAfterDocument(lastDocument);
+      // Firestore's whereIn only supports up to 10 values at a time
+      final List<UserInfoModel> allUsers = [];
+      
+      // Process in batches of 10
+      for (int i = 0; i < following.length; i += 10) {
+        final endIdx = (i + 10 < following.length) ? i + 10 : following.length;
+        final batch = following.sublist(i, endIdx);
+        
+        final querySnapshot = await _usersCollection
+            .where(FirebaseKeys.uid, whereIn: batch)
+            .get();
+        
+        for (final doc in querySnapshot.docs) {
+          allUsers.add(UserInfoModel.fromDocumentSnapshot(doc));
+        }
       }
-
-      final querySnapshot = await query.get();
-
-      if (querySnapshot.docs.isNotEmpty) {
-        lastDocument = querySnapshot.docs.last;
-
-        await Future.forEach(querySnapshot.docs, (doc) async {
-          postList.add(PostModel.fromDocumentSnapshot(doc));
-        });
-
-        return (postList, lastDocument);
-      }
-
-      return (<PostModel>[], lastDocument);
+      
+      // Sort users by name for consistent display
+      allUsers.sort((a, b) => (a.userName ?? '').compareTo(b.userName ?? ''));
+      
+      return allUsers;
     } catch (e) {
-      print(e);
-      throw Exception(e);
+      print("Error fetching followed users: $e");
+      return [];
     }
+  }
+  
+  void resetCache() {
+    _followingCache = null;
   }
 } 

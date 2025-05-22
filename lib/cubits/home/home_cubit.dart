@@ -14,7 +14,6 @@ class HomeCubit extends Cubit<HomeState>
   HomeCubit() : super(HomeInitial()) {
     listenToNewPostScroll();
     listenToMixPostScroll();
-    listenToFollowingPostScroll();
   }
 
   Future<void> getAllPosts() async {
@@ -23,7 +22,7 @@ class HomeCubit extends Cubit<HomeState>
       await Future.wait([
         getNewPosts(),
         getMixPosts(),
-        getFollowingPosts(),
+        getFollowedUsers(),
       ]);
       emit(HomeSuccess());
     } catch (_) {
@@ -36,7 +35,7 @@ class HomeCubit extends Cubit<HomeState>
     activeIcon.close();
     newPostListenerClose();
     mixPostListenerClose();
-    followingPostListenerClose();
+    followingUsersClose();
     return super.close();
   }
 }
