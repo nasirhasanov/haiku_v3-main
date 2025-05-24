@@ -22,6 +22,7 @@ class AppKeys {
   static const userId = 'uid';
   static const username = 'username';
   static const showReview = 'showReview';
+  static const shareAppPrompt = 'shareAppPrompt';
 
   // Bottom sheet option keys
   static const report = 'report';

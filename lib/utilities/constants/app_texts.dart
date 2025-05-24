@@ -95,7 +95,9 @@ class AppTexts {
   static const String following = 'Following';
   static const String topPosts = 'Top Posts';
   static const String followed = 'Followed';
-
+  static const String inviteFriends = 'Invite Friends';
+  static const String shareWithFriends = 'Share with Friends';
+  static const String inviteDescription = 'Invite your friends to join Haiku!';
 
   static const String urlTermsOfService =
       'https://haiku-production-server.web.app/Terms&Conditions.html';

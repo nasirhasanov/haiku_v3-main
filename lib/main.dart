@@ -8,6 +8,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:haiku/utilities/constants/app_themes.dart';
 import 'package:haiku/utilities/enums/notification_type_enum.dart';
 import 'package:haiku/utilities/helpers/app_review_manager.dart';
+import 'package:haiku/utilities/helpers/app_share_manager.dart';
 import 'package:hive/hive.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:path_provider/path_provider.dart';
@@ -17,6 +18,11 @@ import 'locator.dart';
 import 'presentation/app.dart';
 import 'utilities/constants/app_keys.dart';
 import 'utilities/helpers/app_bloc_observer.dart';
+
+// Global navigator key for accessing context
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+// Global AppShareManager instance
+final AppShareManager appShareManager = AppShareManager();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,11 +47,22 @@ void main() async {
     final notificationHelper = NotificationHelper();
     // await notificationHelper.initialize();
 
+    // Initialize app review manager
     final reviewManager = AppReviewManager();
     await reviewManager.checkAndRequestReview();
+    
     MobileAds.instance.initialize();
 
     runApp(const MyApp());
+    
+    // We need to wait for the app to be built and context to be available
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (navigatorKey.currentContext != null) {
+        // Now check if we should show the share dialog
+        appShareManager.checkAndRequestShare(navigatorKey.currentContext!);
+      }
+    });
+    
   } catch (e) {
     print('Error initializing app: $e');
     // You might want to show an error screen or handle the error appropriately

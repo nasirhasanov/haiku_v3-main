@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../main.dart';
 import '../utilities/constants/app_themes.dart';
 import '../utilities/helpers/pager.dart';
 
@@ -12,6 +13,7 @@ class MyApp extends StatelessWidget {
       title: 'Haiku',
       debugShowCheckedModeBanner: false,
       theme: AppThemes.appTheme,
+      navigatorKey: navigatorKey,
       home: Pager.home,
     );
   }
