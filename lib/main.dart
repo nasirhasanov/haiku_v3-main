@@ -45,7 +45,7 @@ void main() async {
 
     // Initialize notifications
     final notificationHelper = NotificationHelper();
-    // await notificationHelper.initialize();
+    await notificationHelper.initialize();
 
     // Initialize app review manager
     final reviewManager = AppReviewManager();

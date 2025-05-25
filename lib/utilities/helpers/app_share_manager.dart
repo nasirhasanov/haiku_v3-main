@@ -13,7 +13,7 @@ class AppShareManager {
   static const String appStoreLink = 'https://play.google.com/store/apps/details?id=com.haiku.android';
   
   /// Share text template
-  static const String _shareTextTemplate = 'Check out Haiku, a beautiful app for sharing your thoughts: ';
+  static const String _shareTextTemplate = 'Check out Haiku, for sharing your poems, ideas and thoughts! ';
 
   /// Checks the number of app launches and suggests sharing on the 3rd launch.
   /// Returns true if the share dialog should be shown.
@@ -28,7 +28,7 @@ class AppShareManager {
     // Show share dialog on the 3rd launch.
     bool shouldShow = launchCount == 3;
     
-    if (true) {
+    if (shouldShow) {
       // Delay showing the prompt a bit to let the app load
       Future.delayed(const Duration(seconds: 2), () {
         showShareDialog(context);
@@ -47,10 +47,9 @@ class AppShareManager {
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (context) => Padding(
-        padding: AppPaddings.a16,
+        padding: AppPaddings.a30,
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Center(
               child: Container(
@@ -63,54 +62,58 @@ class AppShareManager {
                 ),
               ),
             ),
-            Text(
-              AppTexts.inviteFriends,
-              style: AppTextStyles.normalGrey20.copyWith(
-                color: AppColors.purple,
-                fontWeight: FontWeight.bold,
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                AppTexts.inviteFriends,
+                style: AppTextStyles.normalGrey20.copyWith(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             const SizedBox(height: 12),
-            const Text(
-              AppTexts.inviteDescription,
-              style: AppTextStyles.normalGrey14,
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                AppTexts.inviteDescription,
+                style: AppTextStyles.normalGrey14,
+              ),
             ),
             const SizedBox(height: 24),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: Text(
-                    AppTexts.cancel,
-                    style: AppTextStyles.normalGrey14.copyWith(
-                      color: Colors.grey,
-                    ),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  shareApp();
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.purple,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25),
                   ),
                 ),
-                const SizedBox(width: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    shareApp();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.purple,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: Text(
-                    AppTexts.shareWithFriends,
-                    style: AppTextStyles.normalGrey14.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
+                child: Text(
+                  AppTexts.shareWithFriends,
+                  style: AppTextStyles.normalGrey14.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-              ],
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(
+                AppTexts.cancel,
+                style: AppTextStyles.normalGrey14.copyWith(
+                  color: Colors.grey,
+                ),
+              ),
             ),
           ],
         ),
