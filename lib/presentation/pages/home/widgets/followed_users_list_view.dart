@@ -86,7 +86,7 @@ class _FollowedUsersListViewState extends State<FollowedUsersListView> {
             child: Padding(
               padding: AppPaddings.h24,
               child: Text(
-                'You are not following anyone yet.',
+                'You haven\'t saved any authors yet.',
                 style: AppTextStyles.normalGrey14,
                 textAlign: TextAlign.center,
               ),
@@ -286,7 +286,7 @@ class _UserListItemState extends State<_UserListItem> {
                             ),
                             const Spacer(),
                             Text(
-                              '${widget.userInfo.followers?.length ?? 0} followers',
+                              '${widget.userInfo.followers?.length ?? 0} saved by',
                               style: AppTextStyles.normalGrey14,
                             ),
                           ],

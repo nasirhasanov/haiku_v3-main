@@ -73,7 +73,7 @@ class _FollowingPostsPageState extends State<FollowingPostsPage> {
           if (state is FollowingPostsSuccess) {
             if (state.posts.isEmpty) {
               return const Center(
-                child: Text('No posts from followed users yet'),
+                child: Text('No posts from saved authors yet'),
               );
             }
 

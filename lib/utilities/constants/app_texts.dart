@@ -90,11 +90,11 @@ class AppTexts {
   static const String cancel = 'Cancel';
   static const String searchUsername = 'Search username';
   static const String noUsersFound = 'No users found.';
-  static const String follow = 'Follow';
-  static const String unfollow = 'Unfollow';
-  static const String following = 'Following';
+  static const String follow = 'Save Author';
+  static const String unfollow = 'Unsave Author';
+  static const String following = 'Saved Authors';
   static const String topPosts = 'Top Posts';
-  static const String followed = 'Followed';
+  static const String followed = 'Saved';
   static const String inviteFriends = 'Invite Friends';
   static const String shareWithFriends = 'Share with Friends';
   static const String inviteDescription = 'Invite your friends to join Haiku!';
