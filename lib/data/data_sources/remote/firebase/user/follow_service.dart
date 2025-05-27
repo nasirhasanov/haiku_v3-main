@@ -5,7 +5,7 @@ import 'package:haiku/utilities/helpers/firebase_singletons.dart';
 
 class FollowService {
   late final _usersCollection = FirebaseSingletons.usersCollection;
-  static const int _maxFollowing = 100; // Maximum number of users one can follow
+  static const int _maxFollowing = 50; // Maximum number of users one can follow
 
   Future<void> followUser(String userId) async {
     try {

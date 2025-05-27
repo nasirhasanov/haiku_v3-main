@@ -15,6 +15,7 @@ import 'package:haiku/utilities/constants/app_texts.dart';
 import 'package:haiku/utilities/helpers/auth_utils.dart';
 import 'package:haiku/utilities/helpers/go.dart';
 import 'package:haiku/utilities/helpers/pager.dart';
+import 'package:rxdart/rxdart.dart';
 
 class FollowedUsersListView extends StatefulWidget {
   const FollowedUsersListView({
@@ -47,7 +48,9 @@ class _FollowedUsersListViewState extends State<FollowedUsersListView> {
   void didUpdateWidget(FollowedUsersListView oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.users != oldWidget.users) {
-      _users = widget.users;
+      setState(() {
+        _users = widget.users?.map((user) => user).toList();
+      });
     }
   }
 
@@ -58,49 +61,49 @@ class _FollowedUsersListViewState extends State<FollowedUsersListView> {
       setState(() {
         _users?.removeWhere((u) => u.userId == user.userId);
       });
-      
-      // Trigger a refresh to update the backend data
-      widget.onRefresh?.call();
+      // No need to refresh the entire list
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    // Show loading indicator while initially loading
-    if (_users == null) {
-      return const Center(
-        child: CircularProgressIndicator.adaptive(),
-      );
-    }
+    return StreamBuilder<bool>(
+      stream: widget.isLoadingStream,
+      initialData: true,
+      builder: (context, loadingSnapshot) {
+        final isLoading = loadingSnapshot.data ?? true;
 
-    // Show empty state message only when we have confirmed there are no users
-    if (_users!.isEmpty) {
-      return Center(
-        child: Padding(
-          padding: AppPaddings.h24,
-          child: Text(
-            'You are not following anyone yet.',
-            style: AppTextStyles.normalGrey14,
-            textAlign: TextAlign.center,
-          ),
-        ),
-      );
-    }
+        // Show loading indicator while initially loading
+        if (_users == null && isLoading) {
+          return const Center(
+            child: CircularProgressIndicator.adaptive(),
+          );
+        }
 
-    return RefreshIndicator.adaptive(
-      onRefresh: widget.onRefresh ?? () async {},
-      child: ListView.separated(
-        controller: widget.scrollController,
-        itemCount: _users!.length + 1, // +1 for the loading indicator
-        physics: const AlwaysScrollableScrollPhysics(),
-        separatorBuilder: (context, index) => const GlobalDivider.horizontal(left: 70),
-        itemBuilder: (context, index) {
-          // Show loading indicator at the bottom only if we have items and more can be loaded
-          if (index == _users!.length) {
-            return StreamBuilder<bool>(
-              stream: widget.isLoadingStream,
-              builder: (context, snapshot) {
-                final isLoading = snapshot.data ?? false;
+        // Show empty state message only when we have confirmed there are no users and not loading
+        if ((_users == null || _users!.isEmpty) && !isLoading) {
+          return Center(
+            child: Padding(
+              padding: AppPaddings.h24,
+              child: Text(
+                'You are not following anyone yet.',
+                style: AppTextStyles.normalGrey14,
+                textAlign: TextAlign.center,
+              ),
+            ),
+          );
+        }
+
+        return RefreshIndicator.adaptive(
+          onRefresh: widget.onRefresh ?? () async {},
+          child: ListView.separated(
+            controller: widget.scrollController,
+            itemCount: (_users?.length ?? 0) + 1, // +1 for the loading indicator
+            physics: const AlwaysScrollableScrollPhysics(),
+            separatorBuilder: (context, index) => const GlobalDivider.horizontal(left: 70),
+            itemBuilder: (context, index) {
+              // Show loading indicator at the bottom
+              if (_users == null || index == _users!.length) {
                 if (!isLoading) return const SizedBox.shrink();
                 
                 return Padding(
@@ -113,17 +116,17 @@ class _FollowedUsersListViewState extends State<FollowedUsersListView> {
                     ),
                   ),
                 );
-              },
-            );
-          }
-          
-          final user = _users![index];
-          return _UserListItem(
-            userInfo: user,
-            onFollowStateChanged: (isFollowing) => _handleFollowStateChanged(user, isFollowing),
-          );
-        },
-      ),
+              }
+              
+              final user = _users![index];
+              return _UserListItem(
+                userInfo: user,
+                onFollowStateChanged: (isFollowing) => _handleFollowStateChanged(user, isFollowing),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }
@@ -143,14 +146,27 @@ class _UserListItem extends StatefulWidget {
 
 class _UserListItemState extends State<_UserListItem> {
   final FollowService _followService = locator<FollowService>();
-  bool _isFollowing = true; // Default to true for followed users list
+  final BehaviorSubject<bool> _followStateSubject = BehaviorSubject<bool>.seeded(true);
   bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    // Since this is the followed users list, we know they are being followed
-    // No need to check the follow state again
+    _followStateSubject.add(true); // Initialize with true since this is followed users list
+  }
+
+  @override
+  void dispose() {
+    _followStateSubject.close();
+    super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(_UserListItem oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.userInfo.userId != widget.userInfo.userId) {
+      _followStateSubject.add(true);
+    }
   }
 
   Future<void> _toggleFollow() async {
@@ -161,24 +177,32 @@ class _UserListItemState extends State<_UserListItem> {
     });
 
     try {
-      if (_isFollowing) {
+      final currentState = _followStateSubject.value;
+      if (currentState) {
         await _followService.unfollowUser(widget.userInfo.userId!);
+        if (mounted) {
+          _followStateSubject.add(false);
+          widget.onFollowStateChanged(false);
+        }
       } else {
         await _followService.followUser(widget.userInfo.userId!);
+        if (mounted) {
+          _followStateSubject.add(true);
+          widget.onFollowStateChanged(true);
+        }
       }
-
-      setState(() {
-        _isFollowing = !_isFollowing;
-      });
-      
-      // Notify parent about follow state change
-      widget.onFollowStateChanged(_isFollowing);
     } catch (e) {
       print('Error toggling follow: $e');
+      // Revert the state if there was an error
+      if (mounted) {
+        _followStateSubject.add(_followStateSubject.value);
+      }
     } finally {
-      setState(() {
-        _isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
@@ -280,37 +304,45 @@ class _UserListItemState extends State<_UserListItem> {
   }
 
   Widget _buildFollowButton() {
-    return SizedBox(
-      height: 32,
-      child: ElevatedButton(
-        onPressed: _isLoading ? null : _toggleFollow,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: _isFollowing ? AppColors.grey : AppColors.purple,
-          foregroundColor: AppColors.white,
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          elevation: 0,
-        ),
-        child: _isLoading
-            ? const SizedBox(
-                width: 16,
-                height: 16,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.white),
-                ),
-              )
-            : Text(
-                _isFollowing ? AppTexts.unfollow : AppTexts.follow,
-                style: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.white,
-                ),
+    return StreamBuilder<bool>(
+      stream: _followStateSubject.stream,
+      initialData: true,
+      builder: (context, snapshot) {
+        final isFollowing = snapshot.data ?? true;
+        
+        return SizedBox(
+          height: 32,
+          child: ElevatedButton(
+            onPressed: _isLoading ? null : _toggleFollow,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: isFollowing ? AppColors.grey : AppColors.purple,
+              foregroundColor: AppColors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
               ),
-      ),
+              elevation: 0,
+            ),
+            child: _isLoading
+                ? const SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      valueColor: AlwaysStoppedAnimation<Color>(AppColors.white),
+                    ),
+                  )
+                : Text(
+                    isFollowing ? AppTexts.unfollow : AppTexts.follow,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.white,
+                    ),
+                  ),
+          ),
+        );
+      },
     );
   }
 } 
