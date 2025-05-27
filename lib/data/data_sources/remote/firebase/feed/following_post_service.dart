@@ -7,9 +7,6 @@ import 'package:haiku/utilities/helpers/firebase_singletons.dart';
 class FollowingPostService {
   late final _usersCollection = FirebaseSingletons.usersCollection;
   
-  // Cache following list to avoid frequent fetches
-  List<String>? _followingCache;
-  
   // Pagination variables
   int _currentPage = 0;
   static const int _usersPerPage = 10;
@@ -24,26 +21,19 @@ class FollowingPostService {
       // Reset pagination if refreshing
       if (isRefresh) {
         _currentPage = 0;
-        _followingCache = null;
+      }
+
+      // Get current following list directly from Firestore
+      final userDoc = await _usersCollection.doc(currentUserId).get();
+      if (!userDoc.exists) {
+        return [];
       }
       
-      // Get or use cached following list
-      List<String> following;
-      if (_followingCache != null) {
-        following = _followingCache!;
-      } else {
-        final userDoc = await _usersCollection.doc(currentUserId).get();
-        if (!userDoc.exists) {
-          return [];
-        }
-        
-        final data = userDoc.data() as Map<String, dynamic>;
-        following = List<String>.from(data[FirebaseKeys.following] ?? []);
-        _followingCache = following;
-        
-        if (following.isEmpty) {
-          return [];
-        }
+      final data = userDoc.data() as Map<String, dynamic>;
+      final following = List<String>.from(data[FirebaseKeys.following] ?? []);
+      
+      if (following.isEmpty) {
+        return [];
       }
 
       // Calculate pagination indexes
@@ -68,7 +58,11 @@ class FollowingPostService {
           .get();
       
       for (final doc in querySnapshot.docs) {
-        pageUsers.add(UserInfoModel.fromDocumentSnapshot(doc));
+        final userModel = UserInfoModel.fromDocumentSnapshot(doc);
+        // Only add users that are still in the following list
+        if (following.contains(userModel.userId)) {
+          pageUsers.add(userModel);
+        }
       }
       
       // Sort users by name for consistent display
@@ -84,8 +78,7 @@ class FollowingPostService {
     }
   }
   
-  void resetCache() {
-    _followingCache = null;
+  void resetPagination() {
     _currentPage = 0;
   }
 } 

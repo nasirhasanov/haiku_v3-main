@@ -73,9 +73,10 @@ class _FeedViewState extends State<FeedView> with SingleTickerProviderStateMixin
                   stream: _cubit.followedUsersStream,
                   builder: (context, snapshot) {
                     return FollowedUsersListView(
-                      users: snapshot.data ?? [],
+                      users: snapshot.data,
                       onRefresh: () => _cubit.getFollowedUsers(isRefresh: true),
                       scrollController: _cubit.followedUsersScrollController,
+                      isLoadingStream: _cubit.isLoadingStream,
                     );
                   },
                 )

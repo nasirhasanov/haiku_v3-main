@@ -22,26 +22,59 @@ class FollowedUsersListView extends StatefulWidget {
     required this.users,
     this.onRefresh,
     this.scrollController,
+    this.isLoadingStream,
   });
 
   final List<UserInfoModel>? users;
   final Future<void> Function()? onRefresh;
   final ScrollController? scrollController;
+  final Stream<bool>? isLoadingStream;
 
   @override
   State<FollowedUsersListView> createState() => _FollowedUsersListViewState();
 }
 
 class _FollowedUsersListViewState extends State<FollowedUsersListView> {
-  // Remove the refresh behavior when follow state changes
+  List<UserInfoModel>? _users;
+
+  @override
+  void initState() {
+    super.initState();
+    _users = widget.users;
+  }
+
+  @override
+  void didUpdateWidget(FollowedUsersListView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.users != oldWidget.users) {
+      _users = widget.users;
+    }
+  }
+
+  // Handle follow state changes
   void _handleFollowStateChanged(UserInfoModel user, bool isFollowing) {
-    // No longer triggering refresh when unfollowed
-    // This keeps the user in the list even after unfollowing
+    if (!isFollowing) {
+      // Remove the user from the local list when unfollowed
+      setState(() {
+        _users?.removeWhere((u) => u.userId == user.userId);
+      });
+      
+      // Trigger a refresh to update the backend data
+      widget.onRefresh?.call();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (widget.users == null || widget.users!.isEmpty) {
+    // Show loading indicator while initially loading
+    if (_users == null) {
+      return const Center(
+        child: CircularProgressIndicator.adaptive(),
+      );
+    }
+
+    // Show empty state message only when we have confirmed there are no users
+    if (_users!.isEmpty) {
       return Center(
         child: Padding(
           padding: AppPaddings.h24,
@@ -58,27 +91,33 @@ class _FollowedUsersListViewState extends State<FollowedUsersListView> {
       onRefresh: widget.onRefresh ?? () async {},
       child: ListView.separated(
         controller: widget.scrollController,
-        itemCount: widget.users!.length + 1, // +1 for the loading indicator
+        itemCount: _users!.length + 1, // +1 for the loading indicator
         physics: const AlwaysScrollableScrollPhysics(),
         separatorBuilder: (context, index) => const GlobalDivider.horizontal(left: 70),
         itemBuilder: (context, index) {
-          // Show loading indicator at the bottom
-          if (index == widget.users!.length) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: Center(
-                child: widget.users!.isEmpty 
-                  ? const SizedBox() // Empty list, don't show loader
-                  : const SizedBox(
+          // Show loading indicator at the bottom only if we have items and more can be loaded
+          if (index == _users!.length) {
+            return StreamBuilder<bool>(
+              stream: widget.isLoadingStream,
+              builder: (context, snapshot) {
+                final isLoading = snapshot.data ?? false;
+                if (!isLoading) return const SizedBox.shrink();
+                
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: Center(
+                    child: const SizedBox(
                       height: 30, 
                       width: 30, 
                       child: CircularProgressIndicator.adaptive(strokeWidth: 2),
                     ),
-              ),
+                  ),
+                );
+              },
             );
           }
           
-          final user = widget.users![index];
+          final user = _users![index];
           return _UserListItem(
             userInfo: user,
             onFollowStateChanged: (isFollowing) => _handleFollowStateChanged(user, isFollowing),
@@ -110,16 +149,8 @@ class _UserListItemState extends State<_UserListItem> {
   @override
   void initState() {
     super.initState();
-    // Refresh follow state just to be sure it's accurate
-    if (widget.userInfo.userId != null) {
-      _followService.isFollowing(widget.userInfo.userId!).first.then((value) {
-        if (mounted) {
-          setState(() {
-            _isFollowing = value;
-          });
-        }
-      });
-    }
+    // Since this is the followed users list, we know they are being followed
+    // No need to check the follow state again
   }
 
   Future<void> _toggleFollow() async {

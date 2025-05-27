@@ -15,8 +15,10 @@ mixin FollowingPostMixin {
   late final ScrollController followedUsersScrollController = ScrollController();
   
   late final BehaviorSubject<List<UserInfoModel>> _followedUsersSubject = BehaviorSubject<List<UserInfoModel>>.seeded([]);
+  late final BehaviorSubject<bool> _isLoadingSubject = BehaviorSubject<bool>.seeded(false);
 
   ValueStream<List<UserInfoModel>> get followedUsersStream => _followedUsersSubject.stream;
+  ValueStream<bool> get isLoadingStream => _isLoadingSubject.stream;
 
   bool _isLoading = false;
   bool _hasMoreUsers = true;
@@ -36,36 +38,40 @@ mixin FollowingPostMixin {
     
     try {
       _isLoading = true;
-      
-      final users = await _followingService.getFollowedUsers(isRefresh: isRefresh);
+      _isLoadingSubject.add(true);
       
       if (isRefresh) {
-        // Clear previous data on refresh
-        _followedUsersSubject.add(users ?? []);
-        _hasMoreUsers = users?.isNotEmpty ?? false;
-      } else {
-        // Add to existing data
-        final currentList = _followedUsersSubject.value;
-        
-        if (users == null || users.isEmpty) {
-          _hasMoreUsers = false;
-        } else {
-          final updatedList = [...currentList];
-          
-          // Only add users not already in the list to avoid duplicates
-          for (final user in users) {
-            if (!updatedList.any((u) => u.userId == user.userId)) {
-              updatedList.add(user);
-            }
-          }
-          
-          _followedUsersSubject.add(updatedList);
+        // Reset pagination and clear the list on refresh
+        _followingService.resetPagination();
+        _hasMoreUsers = true;
+      }
+
+      final users = await _followingService.getFollowedUsers(isRefresh: isRefresh);
+      
+      if (users == null || users.isEmpty) {
+        if (isRefresh) {
+          _followedUsersSubject.add(<UserInfoModel>[]);
         }
+        _hasMoreUsers = false;
+      } else {
+        final List<UserInfoModel> currentList = isRefresh ? [] : _followedUsersSubject.value;
+        final List<UserInfoModel> updatedList = [...currentList];
+        
+        // Only add users not already in the list to avoid duplicates
+        for (final user in users) {
+          if (!updatedList.any((u) => u.userId == user.userId)) {
+            updatedList.add(user);
+          }
+        }
+        
+        _followedUsersSubject.add(updatedList);
       }
     } catch (e) {
+      print('Error getting followed users: $e');
       _followedUsersSubject.addError('Error getting followed users');
     } finally {
       _isLoading = false;
+      _isLoadingSubject.add(false);
     }
   }
 
@@ -73,5 +79,6 @@ mixin FollowingPostMixin {
     followedUsersScrollController.removeListener(_loadMoreFollowedUsers);
     followedUsersScrollController.dispose();
     _followedUsersSubject.close();
+    _isLoadingSubject.close();
   }
 } 
